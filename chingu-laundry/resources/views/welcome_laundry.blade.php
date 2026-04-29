@@ -366,7 +366,7 @@
     </div>
 </section>
 
-<section class="py-5" style="background: linear-gradient(#efe3cae6, #56B6C6), url('https://images.unsplash.com/photo-1517677208171-0bc6725a3e60?q=80&w=2070&auto=format&fit=crop'); background-size: cover; background-position: center; background-attachment: fixed;">
+<section class="py-5" style="background: linear-gradient(#efe3cae6, #56B6C6, #170C79), url('https://images.unsplash.com/photo-1517677208171-0bc6725a3e60?q=80&w=2070&auto=format&fit=crop'); background-size: cover; background-position: center; background-attachment: fixed;">
     <div class="container py-md-5">
         <div class="row align-items-center">
             
@@ -417,11 +417,11 @@
     .anim-draw { stroke-dashoffset: 100; stroke-dasharray: 100; animation: draw 3s linear infinite; }
 </style>
 
-<section class="py-5 position-relative" style="background: linear-gradient(#efe3cae6, #56B6C6), url('https://images.unsplash.com/photo-1517677208171-0bc6725a3e60?q=80&w=2070&auto=format&fit=crop'); background-size: cover; background-position: center; background-attachment: fixed;">
+<section class="py-5 position-relative" style="background: linear-gradient(#efe3cae6, #56B6C6, #170C79), url('https://images.unsplash.com/photo-1517677208171-0bc6725a3e60?q=80&w=2070&auto=format&fit=crop'); background-size: cover; background-position: center; background-attachment: fixed;">
     <div class="container py-5">
         
         <div class="text-center mb-5">
-            <h2 class="display-6 fw-bold" style="color: #170C79;">Apa Kata Pelanggan Setia Kami?</h2>
+            <h2 class="display-6 fw-bold" style="color: #fcfaf2;">Apa Kata Pelanggan Setia Kami?</h2>
         </div>
 
         <div class="row g-4 justify-content-center">
