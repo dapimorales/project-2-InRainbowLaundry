@@ -33,10 +33,28 @@
     <div class="row">
         <nav class="col-md-2 d-none d-md-block sidebar p-3">
             <ul class="nav flex-column gap-2">
-                <li class="nav-item"><a class="nav-link active" href="#">Dashboard</a></li>
-                <li class="nav-item"><a class="nav-link" href="/layanan">Layanan</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Pelanggan</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Transaksi</a></li>
+                <li class="nav-item">
+                    <!-- Kalau URL-nya cuma '/' atau 'dashboard', dia aktif -->
+                    <a class="nav-link {{ request()->is('dashboard') || request()->is('/') ? 'active' : '' }}" href="/">
+                        Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <!-- Kalau URL diawali dengan 'layanan', dia aktif -->
+                    <a class="nav-link {{ request()->is('layanan*') ? 'active' : '' }}" href="/layanan">
+                        Layanan
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->is('customers*') ? 'active' : '' }}" href="{{ route('customers.index') }}">
+                        Pelanggan
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->is('transaksi*') ? 'active' : '' }}" href="#">
+                        Transaksi
+                    </a>
+                </li>
             </ul>
         </nav>
 

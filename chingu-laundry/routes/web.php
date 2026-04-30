@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ServiceController; // Pindahin ke atas biar rapi
+use App\Http\Controllers\CustomerController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,3 +26,7 @@ Route::get('/layanan/tambah', [ServiceController::class, 'create'])->name('layan
 Route::get('/layanan/{id}/edit', [ServiceController::class, 'edit'])->name('layanan.edit');
 Route::put('/layanan/{id}', [ServiceController::class, 'update'])->name('layanan.update');
 Route::delete('/layanan/{id}', [ServiceController::class, 'destroy'])->name('layanan.destroy');
+Route::get('/customers', [CustomerController::class, 'index'])->name('customers.index');
+Route::post('/reservasi', [CustomerController::class, 'storeReservasi'])->name('reservasi.store');
+Route::get('/customers/{id}', [CustomerController::class, 'show'])->name('customers.show');
+Route::delete('/customers/{id}', [CustomerController::class, 'destroy'])->name('customers.destroy');

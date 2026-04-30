@@ -87,20 +87,30 @@
                     <p class="text-muted small">Isi data di bawah, kurir kami akan segera menjemput pakaianmu.</p>
                 </div>
 
-                <form action="#" class="row g-3">
-                    <div class="col-md-4"><input type="text" class="form-control form-custom" placeholder="Nama Lengkap"></div>
-                    <div class="col-md-4"><input type="text" class="form-control form-custom" placeholder="Alamat Jemput"></div>
-                    <div class="col-md-4"><input type="number" class="form-control form-custom" placeholder="WhatsApp"></div>
+                <form action="{{ route('reservasi.store') }}" method="POST" class="row g-3">
+                    @csrf <!-- Wajib ada buat keamanan! -->
+                    
                     <div class="col-md-4">
-                        <select class="form-select form-custom">
+                        <input type="text" name="nama" class="form-control form-custom" placeholder="Nama Lengkap" required>
+                    </div>
+                    <div class="col-md-4">
+                        <input type="text" name="alamat" class="form-control form-custom" placeholder="Alamat Jemput" required>
+                    </div>
+                    <div class="col-md-4">
+                        <input type="number" name="no_hp" class="form-control form-custom" placeholder="WhatsApp" required>
+                    </div>
+                    
+                    <!-- Bagian Layanan & Waktu (Saran: Simpan ke tabel Orders nanti) -->
+                    <div class="col-md-4">
+                        <select name="layanan" class="form-select form-custom">
                             <option selected disabled>Pilih Layanan</option>
-                            <option>Daily Kiloan</option>
-                            <option>Cuci & Setrika</option>
-                            <option>Laundry Sepatu</option>
+                            <option value="Daily Kiloan">Daily Kiloan</option>
+                            <option value="Cuci & Setrika">Cuci & Setrika</option>
+                            <option value="Laundry Sepatu">Laundry Sepatu</option>
                         </select>
                     </div>
-                    <div class="col-md-4"><input type="date" class="form-control form-custom"></div>
-                    <div class="col-md-4"><input type="time" class="form-control form-custom"></div>
+                    <div class="col-md-4"><input type="date" name="tgl_jemput" class="form-control form-custom"></div>
+                    <div class="col-md-4"><input type="time" name="jam_jemput" class="form-control form-custom"></div>
 
                     <div class="col-12 mt-4 text-end">
                         <button type="submit" class="btn btn-navy px-5 py-3 shadow-sm" style="border-radius: 15px; background-color: #170C79; color: white; border: none; font-weight: bold;">
