@@ -1,22 +1,27 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ServiceController; // Pindahin ke atas biar rapi
 
 /*
 |--------------------------------------------------------------------------
 | Web Routes
 |--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
 */
 
+// Halaman Landing Page (In Rainbow Laundry)
 Route::get('/', function () {
     return view('welcome_laundry');
-});
+})->name('home');
 
-use App\Http\Controllers\ServiceController;
+// Halaman Daftar Layanan (Dashboard Admin)
+// Akses di: localhost:8000/layanan
+Route::get('/layanan', [ServiceController::class, 'index'])->name('layanan.index');
 
-Route::get('/layanan', [ServiceController::class, 'index']);
+// Route untuk Proses Simpan Data (Buat fitur nambah layanan nanti)
+Route::post('/layanan', [ServiceController::class, 'store'])->name('layanan.store');
+// Route buat nampilin form tambah
+Route::get('/layanan/tambah', [ServiceController::class, 'create'])->name('layanan.create');
+Route::get('/layanan/{id}/edit', [ServiceController::class, 'edit'])->name('layanan.edit');
+Route::put('/layanan/{id}', [ServiceController::class, 'update'])->name('layanan.update');
+Route::delete('/layanan/{id}', [ServiceController::class, 'destroy'])->name('layanan.destroy');

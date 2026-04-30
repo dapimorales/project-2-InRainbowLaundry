@@ -47,5 +47,15 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Tunggu 3 detik, terus hilangin alert-nya
+    setTimeout(function() {
+        let alert = document.querySelector('.alert');
+        if (alert) {
+            let bsAlert = new bootstrap.Alert(alert);
+            bsAlert.close();
+        }
+    }, 3000);
+</script>
 </body>
 </html>

@@ -3,8 +3,11 @@
 @section('content')
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
     <h1 class="h2">Daftar Layanan</h1>
-    <button class="btn btn-primary btn-sm">+ Tambah Layanan</button>
+   <a href="{{ route('layanan.create') }}" class="btn btn-primary btn-sm">+ Tambah Layanan</a>
 </div>
+@include('layouts.flash')
+
+
 
 <div class="card shadow-sm">
     <div class="card-body">
@@ -26,8 +29,13 @@
                     <td>Rp {{ number_format($s->harga) }}</td>
                     <td><span class="badge bg-info text-dark">{{ $s->satuan }}</span></td>
                     <td>
-                        <button class="btn btn-warning btn-sm">Edit</button>
-                        <button class="btn btn-danger btn-sm">Hapus</button>
+                        <!-- Tombol Edit -->
+                        <a href="{{ route('layanan.edit', $s->id) }}" class="btn btn-warning btn-sm">Edit</a>
+                        <form action="{{ route('layanan.destroy', $s->id) }}" method="POST" class="d-inline">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Yakin mau hapus, masbro?')">Remove</button>
+                        </form>
                     </td>
                 </tr>
                 @empty
