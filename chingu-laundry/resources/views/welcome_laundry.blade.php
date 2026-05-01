@@ -7,150 +7,35 @@
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
-
-<style>
-    body { 
-        font-family: 'Poppins', sans-serif; 
-        background-color: #fcfaf2; 
-        color: #333; 
-        margin: 0; 
-        /* Pastikan padding ini ada biar konten nggak tenggelam */
-        padding-top: 90px !important; 
-    }
-    
-    .navbar { 
-    background-color: #ffffff !important; 
-    position: fixed; 
-    top: 0;
-    left: 0;
-    width: 100%;
-    z-index: 9999;
-    transition: transform 0.3s ease-in-out;
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+    /* Keyframes buat efek masuk dari luar (zoom + fade) */
+    @keyframes entryEffect {
+        from {
+            opacity: 0;
+            transform: scale(0.7) translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+        }
     }
 
-    /* Efek hide */
-    .navbar.hide {
-        transform: translateY(-100%);
+    /* Class utama animasi */
+    .animate-item {
+        opacity: 0; /* Awalnya sembunyi */
+        animation: entryEffect 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
     }
 
-    .hero { 
-        background: linear-gradient(135deg, #EFE3CA 0%, #ffffff 100%); 
-        padding: 20px 0 60px 0;
-        position: relative; /* Pastikan konten hero ada di bawah navbar */
-    }
-    
-    .text-navy { color: #170C79; }
-    
-    .btn-navy { 
-        background-color: #170C79; 
-        color: #EFE3CA; 
-        border-radius: 50px; 
-        font-weight: bold; 
-    }
-    
-    .btn-navy:hover { 
-        background-color: #56B6C6; 
-        color: #170C79; 
-    }
-    /* Biar dropdown muncul saat hover */
-.nav-item.dropdown:hover .dropdown-menu {
-    display: block;
-    margin-top: 0;
-    opacity: 1;
-    visibility: visible;
-}
-
-/* Default hidden (biar bisa animasi) */
-.dropdown-menu {
-    display: block;
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(10px);
-    transition: all 0.3s ease;
-    pointer-events: none;
-}
-.dropdown-item {
-    color: #170C79; /* sama kayak navbar */
-    font-weight: 500;
-    border-radius: 10px;
-    transition: 0.2s;
-}
-
-.dropdown-item:hover {
-    background-color: #56B6C6; /* warna hover navbar */
-    color: #ffffff;
-    transform: translateX(5px);
-}
-/* Animasi naik halus */
-.nav-item.dropdown:hover .dropdown-menu {
-    transform: translateY(0);
-    pointer-events: auto;
-}
-.nav-item.dropdown {
-    position: relative;
-}
+    /* Delay biar masuknya satu per satu */
+    .delay-1 { animation-delay: 0.2s; }
+    .delay-2 { animation-delay: 0.5s; }
+    .delay-3 { animation-delay: 0.8s; }
+    .delay-4 { animation-delay: 1.1s; }
 </style>
-</head>
-<body>
+@include('partials.navbar')
 
-<nav class="navbar navbar-expand-lg shadow-sm py-3 bg-white">
-    <!-- Wrapper biar rapi -->
-    <div class="container d-flex align-items-center justify-content-between">
-
-        <!-- Logo -->
-        <a class="navbar-brand fw-bold fs-4" href="#">
-            <span style="color: #170C79;">IN</span> 
-            <span style="color: #56B6C6;">RAINBOW</span> 
-            <span style="color: #8ACBD0;">LAUNDRY</span>
-        </a>
-
-        <!-- RIGHT SIDE (SELALU MUNCUL) -->
-        <div class="d-flex align-items-center order-lg-2">
-            <a href="/layanan" class="nav-link me-3 fw-bold text-navy d-none d-lg-block">
-                Dashboard Admin
-            </a>
-            
-           <a href="#form-reservasi" class="btn btn-navy px-4">
-                Reservasi
-            </a>
-
-            <!-- Burger -->
-            <button class="navbar-toggler ms-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-        </div>
-
-        <!-- MENU (MASUK BURGER) -->
-        <div class="collapse navbar-collapse order-lg-1" id="navbarNav">
-            <ul class="navbar-nav mx-auto gap-2">
-                <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle text-navy fw-semibold" 
-                href="#" 
-                id="berandaDropdown" 
-                role="button" 
-                data-bs-toggle="dropdown" 
-                aria-expanded="false">
-                    Beranda
-                </a>
-
-            <ul class="dropdown-menu shadow border-0 p-3" aria-labelledby="berandaDropdown" style="border-radius: 15px;">
-                    <li><a class="dropdown-item py-2" href="#">Tentang Kami</a></li>
-                    <li><a class="dropdown-item py-2" href="#">Layanan Kami</a></li>
-                    <li><a class="dropdown-item py-2" href="#">Jadwalkan Penjemputan</a></li>
-                    <li><a class="dropdown-item py-2" href="#">Testimoni</a></li>
-                </ul>
-                </li>
-                <li class="nav-item"><a class="nav-link text-navy fw-semibold" href="#">Outlet</a></li>
-                <li class="nav-item"><a class="nav-link text-navy fw-semibold" href="#">Kemitraan</a></li>
-                <li class="nav-item"><a class="nav-link text-navy fw-semibold" href="#">Cek Status Cucianmu</a></li>
-                <li class="nav-item"><a class="nav-link text-navy fw-semibold" href="#">Syarat & Ketentuan</a></li>
-            </ul>
-        </div>
-
-    </div>
-</nav>
-
-<section class="hero overflow-hidden" style="background: linear-gradient(135deg, #EFE3CA 0%, #ffffff 100%); padding: 0;">
+<section class="hero overflow-hidden animate-zoom-in animate-item delay-1" style="background: linear-gradient(135deg, #EFE3CA 0%, #ffffff 100%); padding: 0;">
     <div class="container-fluid p-0">
         <div class="row g-0 align-items-center">
             
@@ -161,12 +46,12 @@
                 <p class="lead mb-4 text-muted">
                     In Rainbow Laundry: Bersih, Wangi, Higienis, dan Tepat Waktu untuk kebutuhan harianmu.
                 </p>
-                <div class="d-flex gap-3">
+                <div class="d-flex gap-3 animate-item delay-2">
                     <div class="bg-white p-3 rounded shadow-sm border text-center">
                         <small class="text-muted d-block">Mulai Dari</small>
                         <strong class="text-navy fs-5">IDR 5.000</strong>
                     </div>
-                    <div class="bg-white p-3 rounded shadow-sm border text-center">
+                    <div class="bg-white p-3 rounded shadow-sm border text-center animate-item delay-2">
                         <small class="text-muted d-block">Layanan</small>
                         <strong class="text-navy fs-5">Express 3 Jam</strong>
                     </div>
@@ -617,52 +502,7 @@
     </div>
 </section>
 
-<footer class="py-5 position-relative" style="background-color: #fcfaf2; border-top: 5px solid #56B6C6;">
-    <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: url('https://img.icons8.com/ios/100/170C79/washing-machine.png'); background-repeat: repeat; background-size: 80px; opacity: 0.02; z-index: 0;"></div>
-
-    <div class="container position-relative" style="z-index: 1;">
-        <div class="row g-4">
-            
-            <div class="col-md-4">
-                <h4 class="fw-bold mb-3">
-                    <span style="color: #170C79;">IN</span> 
-                    <span style="color: #56B6C6;">RAINBOW</span>
-                </h4>
-                <p class="text-muted small mb-4" style="text-align: justify;">
-                    <strong>In Rainbow Laundry</strong> adalah layanan laundry profesional yang mengutamakan kebersihan dan kepuasan pelanggan dengan prinsip bersih, rapi, wangi, higienis & tepat waktu.
-                </p>
-                <div class="d-flex gap-2">
-                    <a href="#" class="btn btn-navy rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px; background: #170C79; color: white;"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#" class="btn btn-navy rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px; background: #170C79; color: white;"><i class="fab fa-instagram"></i></a>
-                    <a href="#" class="btn btn-navy rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px; background: #170C79; color: white;"><i class="fab fa-whatsapp"></i></a>
-                </div>
-            </div>
-
-            <div class="col-md-4 ps-md-5">
-                <h6 class="fw-bold text-navy mb-4">Menu</h6>
-                <ul class="list-unstyled text-muted small">
-                    <li class="mb-2"><a href="#" class="text-decoration-none text-muted">Beranda</a></li>
-                    <li class="mb-2"><a href="#" class="text-decoration-none text-muted">Layanan</a></li>
-                    <li class="mb-2"><a href="#" class="text-decoration-none text-muted">Kemitraan</a></li>
-                    <li class="mb-2"><a href="#" class="text-decoration-none text-muted">Cek Status Cucian</a></li>
-                </ul>
-            </div>
-
-            <div class="col-md-4">
-                <h6 class="fw-bold text-navy mb-4">Kontak</h6>
-                <div class="d-flex align-items-center mb-3">
-                    <div class="me-3 text-sea"><i class="fas fa-phone-alt"></i></div>
-                    <span class="text-muted small">0812-xxxx-xxxx</span>
-                </div>
-                <div class="d-flex align-items-center mb-3">
-                    <div class="me-3 text-sea"><i class="fas fa-envelope"></i></div>
-                    <span class="text-muted small">halo@inrainbowlaundry.com</span>
-                </div>
-            </div>
-
-        </div>
-    </div>
-</footer>
+@include('partials.footer')
 
 <div class="py-3" style="background-color: #56B6C6; color: #fcfaf2;">
     <div class="container">

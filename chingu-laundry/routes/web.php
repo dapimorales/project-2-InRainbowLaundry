@@ -30,3 +30,4 @@ Route::get('/customers', [CustomerController::class, 'index'])->name('customers.
 Route::post('/reservasi', [CustomerController::class, 'storeReservasi'])->name('reservasi.store');
 Route::get('/customers/{id}', [CustomerController::class, 'show'])->name('customers.show');
 Route::delete('/customers/{id}', [CustomerController::class, 'destroy'])->name('customers.destroy');
+Route::get('/syarat-ketentuan', function (){return view('syarat_ketentuan');})->name('syarat.ketentuan');
