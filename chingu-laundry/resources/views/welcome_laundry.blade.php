@@ -429,90 +429,66 @@
     .anim-draw { stroke-dashoffset: 100; stroke-dasharray: 100; animation: draw 3s linear infinite; }
 </style>
 
-<section class="py-5 position-relative" style="background: linear-gradient(#efe3cae6, #56B6C6, #170C79), url('https://images.unsplash.com/photo-1517677208171-0bc6725a3e60?q=80&w=2070&auto=format&fit=crop'); background-size: cover; background-position: center; background-attachment: fixed;">
-    <div class="container py-5">
-        
+<!-- SECTION TESTIMONI (Update: Clean White with Silhouette) -->
+<section class="py-5 position-relative" style="background-color: #ffffff; border-radius: 60px 60px 0 0; margin-top: 50px;">
+    <!-- Siluet Mesin Cuci (Sea Blue Tipis) -->
+    <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: url('https://img.icons8.com/ios/100/56B6C6/washing-machine.png'); background-repeat: repeat; background-size: 100px; opacity: 0.04; z-index: 0;"></div>
+
+    <div class="container position-relative py-5" style="z-index: 1;">
         <div class="text-center mb-5">
-            <h2 class="display-6 fw-bold" style="color: #fcfaf2;">Apa Kata Pelanggan Setia Kami?</h2>
+            <h2 class="display-6 fw-bold" style="color: #170C79;">Apa Kata Pelanggan Setia Kami?</h2>
         </div>
 
         <div class="row g-4 justify-content-center">
-            
+            @php
+                $testimonis = [
+                    ['nama' => 'Radya Ananta Vikrama', 'initial' => 'RA', 'bg' => '#170C79', 'border' => '#56B6C6', 'text' => 'In Rainbow Laundry tempat laundry andalan, punya layanan terbaik karena bisa express!'],
+                    ['nama' => 'Salsabila Septia Gunawan', 'initial' => 'SS', 'bg' => '#56B6C6', 'border' => '#170C79', 'text' => 'Penyelamat banget buat yang suka lupa nyuci. Hasilnya langsung bersih dan wangi.'],
+                    ['nama' => 'Lillian Bell', 'initial' => 'LB', 'bg' => '#170C79', 'border' => '#56B6C6', 'text' => 'Cepat, tepat, wangi, rapi, dan ada delivery servicenya. Ga khawatir kehabisan baju!']
+                ];
+            @endphp
+
+            @foreach($testimonis as $t)
             <div class="col-md-4">
-                <div class="card border-0 h-100 shadow-sm text-center p-4 position-relative" style="border-radius: 20px; padding-top: 60px !important; background-color: #ffffff;">
+                <div class="card border-0 h-100 shadow-sm text-center p-4 position-relative" style="border-radius: 20px; padding-top: 60px !important; background-color: #fcfaf2;">
                     <div class="position-absolute top-0 start-50 translate-middle-x mt-3">
                         <svg width="40" height="40" viewBox="0 0 24 24" fill="#56B6C6" opacity="0.4">
                             <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.437.917-4.016 3.638-4.016 5.849h3.983v10h-9.967z"/>
                         </svg>
                     </div>
-                    
-                    <p class="text-muted small mb-4 italic">"In Rainbow Laundry tempat laundry andalan, punya layanan terbaik karena bisa express, harganya terjangkau mana bisa di antar jemput lagi!"</p>
-                    
+                    <p class="text-muted small mb-4 italic">"{{ $t['text'] }}"</p>
                     <div class="mt-auto">
-                        <div class="mb-2 text-warning">★★★★★</div>
+                        <div class="mb-2 text-warning small">★★★★★</div>
                         <div class="d-flex justify-content-center mb-2">
-                             <div class="rounded-circle d-flex align-items-center justify-content-center fw-bold text-white" style="width: 60px; height: 60px; background: #170C79; border: 3px solid #56B6C6; font-size: 1.2rem;">RA</div>
+                             <div class="rounded-circle d-flex align-items-center justify-content-center fw-bold text-white shadow-sm" style="width: 55px; height: 55px; background: {{ $t['bg'] }}; border: 3px solid {{ $t['border'] }};">
+                                {{ $t['initial'] }}
+                             </div>
                         </div>
-                        <h6 class="fw-bold text-navy mb-0">Radya Ananta Vikrama</h6>
+                        <h6 class="fw-bold text-navy mb-0 small">{{ $t['nama'] }}</h6>
                     </div>
                 </div>
             </div>
-
-            <div class="col-md-4">
-                <div class="card border-0 h-100 shadow-sm text-center p-4 position-relative" style="border-radius: 20px; padding-top: 60px !important; background-color: #ffffff;">
-                    <div class="position-absolute top-0 start-50 translate-middle-x mt-3">
-                        <svg width="40" height="40" viewBox="0 0 24 24" fill="#56B6C6" opacity="0.4">
-                            <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.437.917-4.016 3.638-4.016 5.849h3.983v10h-9.967z"/>
-                        </svg>
-                    </div>
-                    
-                    <p class="text-muted small mb-4">"Penyelamat banget buat yang suka lupa nyuci. Hasil nyucinya bisa langsung diambil dalam waktu singkat, udah gitu pasti bersih dan wangi."</p>
-                    
-                    <div class="mt-auto">
-                        <div class="mb-2 text-warning">★★★★★</div>
-                        <div class="d-flex justify-content-center mb-2">
-                             <div class="rounded-circle d-flex align-items-center justify-content-center fw-bold text-white" style="width: 60px; height: 60px; background: #56B6C6; border: 3px solid #170C79; font-size: 1.2rem;">SS</div>
-                        </div>
-                        <h6 class="fw-bold text-navy mb-0">Salsabila Septia Gunawan</h6>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-4">
-                <div class="card border-0 h-100 shadow-sm text-center p-4 position-relative" style="border-radius: 20px; padding-top: 60px !important; background-color: #ffffff;">
-                    <div class="position-absolute top-0 start-50 translate-middle-x mt-3">
-                        <svg width="40" height="40" viewBox="0 0 24 24" fill="#56B6C6" opacity="0.4">
-                            <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.437.917-4.016 3.638-4.016 5.849h3.983v10h-9.967z"/>
-                        </svg>
-                    </div>
-                    
-                    <p class="text-muted small mb-4">"Cepat, tepat, wangi, rapi, dan ada delivery servicenya. Ada In Rainbow Laundry saya ga khawatir kehabisan baju. Mantap!"</p>
-                    
-                    <div class="mt-auto">
-                        <div class="mb-2 text-warning">★★★★★</div>
-                        <div class="d-flex justify-content-center mb-2">
-                             <div class="rounded-circle d-flex align-items-center justify-content-center fw-bold text-white" style="width: 60px; height: 60px; background: #170C79; border: 3px solid #56B6C6; font-size: 1.2rem;">LB</div>
-                        </div>
-                        <h6 class="fw-bold text-navy mb-0">Lillian Bell</h6>
-                    </div>
-                </div>
-            </div>
-
+            @endforeach
         </div>
     </div>
 </section>
 
 @include('partials.footer')
 
-<div class="py-3" style="background-color: #56B6C6; color: #fcfaf2;">
+<!-- COPYRIGHT BAR (Updated: Sea Blue with Navy Text) -->
+<!-- Copyright Bar dengan Teks Warna Beige (#EFE3CA) -->
+<div class="py-3" style="background-color: #56B6C6; color: #EFE3CA;">
     <div class="container">
         <div class="row align-items-center">
+            <!-- Teks Copyright -->
             <div class="col-md-6 text-center text-md-start small fw-bold">
-                Copyright © In Rainbow Laundry 2026
+                Copyright © In Rainbow Laundry {{ date('Y') }}
             </div>
+            <!-- Bagian Managed By -->
             <div class="col-md-6 text-center text-md-end small">
                 <span class="fw-bold ms-2 d-inline-flex align-items-center">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#170C79" stroke-width="2" class="me-2">
+                    <!-- Warna stroke pada SVG juga diubah ke Beige agar seragam -->
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#EFE3CA" stroke-width="2" class="me-2">
                         <path d="M4 3h16a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/>
                         <circle cx="12" cy="13" r="5" stroke-dasharray="2 2"/>
                     </svg>
