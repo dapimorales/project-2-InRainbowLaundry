@@ -20,7 +20,6 @@
             transform: scale(1) translateY(0);
         }
     }
-
     /* Class utama animasi */
     .animate-item {
         opacity: 0; /* Awalnya sembunyi */
@@ -32,6 +31,18 @@
     .delay-2 { animation-delay: 0.5s; }
     .delay-3 { animation-delay: 0.8s; }
     .delay-4 { animation-delay: 1.1s; }
+    .custom-input {
+        border: 1px solid #e0e0e0;
+        border-radius: 4px;
+        color: #6c757d;
+    }
+    .custom-input:focus {
+        border-color: #179BAE;
+        box-shadow: 0 0 0 0.2rem rgba(23, 155, 174, 0.25);
+    }
+    .custom-input::placeholder {
+        color: #adb5bd;
+    }
 </style>
 @include('partials.navbar')
 
@@ -378,44 +389,83 @@
     </div>
 </section>
 
-<section class="py-5" style="background: linear-gradient(#efe3cae6, #56B6C6, #170C79), url('https://images.unsplash.com/photo-1517677208171-0bc6725a3e60?q=80&w=2070&auto=format&fit=crop'); background-size: cover; background-position: center; background-attachment: fixed;">
-    <div class="container py-md-5">
-        <div class="row align-items-center">
+<section class="position-relative d-flex align-items-center" style="min-height: 80vh; background: linear-gradient(rgba(23, 155, 174, 0.9), rgba(23, 155, 174, 0.9)), url('https://images.unsplash.com/photo-1545173168-9f1947eebb7f?q=80&w=2071&auto=format&fit=crop'); background-size: cover; background-position: center; background-attachment: fixed; padding: 80px 0;">
+    
+    <div class="container">
+        <div class="row align-items-center justify-content-between">
             
-            <div class="col-md-6 text-white mb-5 mb-md-0">
-                <h2 class="display-5 fw-bold mb-4" style="line-height: 1.2;">
-                    Antar Jemput - <br>
-                    Maksimal 30 Menit <br>
-                    Dipickup
-                </h2>
-                <p class="lead opacity-90 mb-4" style="text-align: justify; font-size: 1.1rem;">
-                    Kami memahami bahwa kenyamanan Anda adalah prioritas kami. Oleh karena itu, kami menyediakan layanan antar-jemput gratis dengan waktu penjemputan maksimal 30 menit setelah Anda melakukan pemesanan. Hubungi kami atau pesan melalui aplikasi, dan kami akan segera datang untuk mengambil cucian Anda.
+            <!-- Kiri: Teks Promosi -->
+            <div class="col-lg-5 text-white mb-5 mb-lg-0">
+                <h1 class="fw-bold mb-4" style="font-size: 3.5rem; line-height: 1.1;">
+                    Cucian di<br>rumah sudah<br>numpuk ?
+                </h1>
+                <p class="mb-4" style="font-size: 1.1rem; opacity: 0.9;">
+                    Jangan ragu untuk menghubungi kami.<br>
+                    Komunikasikan kebutuhan laundry Anda.
                 </p>
-                <a href="#" class="btn btn-light text-navy fw-bold px-5 py-3 shadow" style="border-radius: 15px; color: #170C79;">
-                    Pesan Sekarang 🛵
+                <a href="https://wa.me/6281234567890" target="_blank" class="btn text-white px-4 py-2 mt-2" style="background-color: rgba(255, 255, 255, 0.15); border: 1px solid rgba(255, 255, 255, 0.3); border-radius: 5px; transition: 0.3s;">
+                    Hubungi Kami
                 </a>
             </div>
 
-            <div class="col-md-6">
-                <div class="position-relative p-4 text-center">
-                    <svg viewBox="0 0 500 400" fill="none" xmlns="http://www.w3.org/2000/svg" class="img-fluid anim-float" style="max-width: 450px;">
-                        <rect x="100" y="20" width="220" height="350" rx="30" fill="#ffffff" stroke="#170C79" stroke-width="8"/>
-                        <rect x="115" y="40" width="190" height="310" rx="15" fill="#f8f9fa"/>
+            <!-- Kanan: Card Form Reservasi -->
+            <div class="col-lg-6">
+                <div class="card border-0 shadow-lg" style="border-radius: 8px;">
+                    <div class="card-body p-4 p-md-5 position-relative">
                         
-                        <path d="M130 300 C 180 300, 180 150, 280 150" stroke="#170C79" stroke-width="4" stroke-dasharray="8 4" class="anim-draw"/>
-                        
-                        <circle cx="130" cy="300" r="10" fill="#170C79"/>
-                        <circle cx="280" cy="150" r="10" fill="#E74C3C"/>
-                        
-                        <g transform="translate(250, 180) scale(1.2)">
-                            <path d="M10 50 L5 30 H25 L35 50 H10Z" fill="#170C79"/>
-                            <rect x="25" y="30" width="15" height="15" rx="2" fill="#ffffff" stroke="#170C79" stroke-width="2"/> <circle cx="12" cy="55" r="5" fill="#333"/> <circle cx="33" cy="55" r="5" fill="#333"/> <path d="M5 30 L0 20 H10 L10 30" stroke="#170C79" stroke-width="2"/> </g>
-                    </svg>
+                        <form action="#" method="POST">
+                            <div class="row g-3">
+                                
+                                <!-- Nama -->
+                                <div class="col-md-6">
+                                    <input type="text" class="form-control py-2 custom-input" placeholder="Nama" name="nama" required>
+                                </div>
+                                
+                                <!-- WhatsApp -->
+                                <div class="col-md-6">
+                                    <input type="number" class="form-control py-2 custom-input" placeholder="No Whatsapp" name="whatsapp" required>
+                                </div>
+                                
+                                <!-- Alamat -->
+                                <div class="col-12">
+                                    <input type="text" class="form-control py-2 custom-input" placeholder="Alamat" name="alamat" required>
+                                </div>
+                                
+                                <!-- Layanan -->
+                                <div class="col-md-5">
+                                    <select class="form-select py-2 custom-input" name="service_id" style="color: #179BAE;" required>
+                                        <option value="" selected disabled>Daily Kiloan</option>
+                                        <option value="1" style="color: #333;">Cuci Setrika Kiloan</option>
+                                        <option value="2" style="color: #333;">Cuci Selimut</option>
+                                        <option value="3" style="color: #333;">Cuci Sepatu</option>
+                                    </select>
+                                </div>
+                                
+                                <!-- Tanggal Jemput (Pake trik onfocus biar placeholder text tetep muncul sblm diklik) -->
+                                <div class="col-md-4">
+                                    <input type="text" class="form-control py-2 custom-input" placeholder="Tanggal Jemput" name="tgl_jemput" onfocus="(this.type='date')" onblur="(this.type='text')" required>
+                                </div>
+                                
+                                <!-- Jam Jemput -->
+                                <div class="col-md-3">
+                                    <input type="text" class="form-control py-2 custom-input" placeholder="Jam Jemput" name="jam_jemput" onfocus="(this.type='time')" onblur="(this.type='text')" required>
+                                </div>
 
-                    <div class="position-absolute bottom-0 start-50 translate-middle-x mb-5">
-                        <div class="bg-white p-3 shadow rounded-4 border-start border-danger border-4" style="min-width: 150px;">
-                            <strong class="text-navy fs-5">OnTheWay</strong>
-                        </div>
+                                <!-- Pesan (Textarea) -->
+                                <div class="col-12">
+                                    <textarea class="form-control py-2 custom-input" rows="4" placeholder="Pesan" name="pesan"></textarea>
+                                </div>
+                                
+                                <!-- Tombol Submit -->
+                                <div class="col-12 mt-4 position-relative">
+                                    <button type="submit" class="btn w-100 py-3 fw-bold text-white d-flex justify-content-center align-items-center gap-2" style="background-color: #179BAE; border-radius: 5px;">
+                                        Pickup Now <i class="fa-solid fa-truck-fast"></i>
+                                    </button>
+                                </div>
+
+                            </div>
+                        </form>
+
                     </div>
                 </div>
             </div>

@@ -18,7 +18,7 @@ Route::get('/', function () {
 // Halaman Daftar Layanan (Dashboard Admin)
 // Akses di: localhost:8000/layanan
 Route::get('/layanan', [ServiceController::class, 'index'])->name('layanan.index');
-
+// Halaman Utama Dashboard Admin
 // Route untuk Proses Simpan Data (Buat fitur nambah layanan nanti)
 Route::post('/layanan', [ServiceController::class, 'store'])->name('layanan.store');
 // Route buat nampilin form tambah
