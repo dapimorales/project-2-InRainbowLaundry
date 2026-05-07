@@ -49,6 +49,11 @@ class CustomerController extends Controller
 
     // GABUNGKAN Tanggal dan Jam (Format SQL: YYYY-MM-DD HH:MM:SS)
     $waktuLengkap = $request->tgl_jemput . ' ' . $request->jam_jemput . ':00';
+    //subtotal harga
+    $layanan = \App\Models\Service::find($request->service_id);
+    $harga = $layanan ? $layanan->harga : 0; // Kalo ketemu ambil harganya, kalo nggak 0
+    $qty_awal = 1; // Default awal diset 1 dulu pas pickup
+    $subtotal_awal = $harga * $qty_awal;
 
     // 3. Simpan ke tabel orders
     $order = \App\Models\Order::create([
@@ -56,7 +61,7 @@ class CustomerController extends Controller
         'customer_id'  => $customer->id, 
         'tgl_masuk'    => $waktuLengkap, // Sekarang sudah bisa masuk sekaligus jamnya
         'tgl_selesai'  => null,
-        'total_harga'  => 0, 
+        'total_harga'  => $subtotal_awal, 
         'status_order' => 'baru',  // Pakai 'baru' sesuai ENUM di DB
         'status_bayar' => 'belum', // Pakai 'belum' sesuai ENUM di DB
     ]);
@@ -66,7 +71,7 @@ class CustomerController extends Controller
         'order_id'   => $order->id,
         'service_id' => $request->service_id,
         'qty'        => 1,
-        'subtotal'   => 0,
+        'subtotal'   => $subtotal_awal,
     ]);
 
     return redirect()->back()->with('success', 'Tunggu ya masbro, kurir kami segera meluncur!');
@@ -84,5 +89,35 @@ public function destroy($id)
     $customer->delete();
 
     return redirect()->route('customers.index')->with('success', 'Data pelanggan berhasil dihapus, Masbro!');
+}
+public function showTransaksi($id)
+{
+    // Ambil order berdasarkan ID, sekalian bawa data customer dan rincian layanannya
+    $order = \App\Models\Order::with(['customer', 'orderDetails.service'])->findOrFail($id);
+    
+    return view('transaksi.show', compact('order'));
+}
+public function updateStatus(Request $request, $id)
+{
+    // 1. Validasi (pastiin status yang dikirim sesuai ENUM di DB)
+    $request->validate([
+        'status_order' => 'required|in:baru,proses,selesai,diambil'
+    ]);
+
+    // 2. Cari ordernya
+    $order = \App\Models\Order::findOrFail($id);
+
+    // 3. Update statusnya
+    $order->status_order = $request->status_order;
+
+    // Logika tambahan: Kalo statusnya 'selesai', isi tgl_selesai otomatis
+    if ($request->status_order == 'selesai') {
+        $order->tgl_selesai = now(); 
+    }
+
+    $order->save();
+
+    // 4. Balik lagi ke halaman detail dengan pesan sukses
+    return redirect()->back()->with('success', 'Status order berhasil diupdate, Masbro!');
 }
 }

@@ -46,8 +46,8 @@
                             @endif
                         </td>
                         <td>
-                            <button class="btn btn-info btn-sm text-white">Detail</button>
-                            </td>
+                            <a href="{{ route('transaksi.show', $order->id) }}" class="btn btn-info btn-sm text-white">Detail</a>
+                        </td>
                     </tr>
                     @empty
                     <tr>

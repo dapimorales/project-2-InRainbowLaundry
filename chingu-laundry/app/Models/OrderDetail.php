@@ -15,4 +15,8 @@ class OrderDetail extends Model
         'qty', 
         'subtotal'
     ];
+    public function service()
+    {
+        return $this->belongsTo(Service::class, 'service_id');
+    }
 }

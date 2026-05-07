@@ -113,7 +113,8 @@
                 </div>
 
                 <form action="{{ route('reservasi.store') }}" method="POST" class="row g-3">
-                    @csrf <div class="col-md-4">
+                    @csrf 
+                    <div class="col-md-4">
                         <input type="text" name="nama" class="form-control form-custom" placeholder="Nama Lengkap" required>
                     </div>
                     <div class="col-md-4">
@@ -333,7 +334,7 @@
     </div>
 </section>
 
-<section id="form-pickup" class="py-5" style="background-color: #ffffff;">
+<section  class="py-5" style="background-color: #ffffff;">
     <div class="container py-md-5">
         <div class="text-center mb-5">
             <h6 class="fw-bold text-uppercase" style="letter-spacing: 2px; color: #56B6C6;">Keunggulan Kami</h6>
@@ -403,7 +404,7 @@
     </div>
 </section>
 
-<section class="position-relative d-flex align-items-center" style="min-height: 80vh; background: linear-gradient(rgba(23, 155, 174, 0.9), rgba(23, 155, 174, 0.9)), url('https://images.unsplash.com/photo-1545173168-9f1947eebb7f?q=80&w=2071&auto=format&fit=crop'); background-size: cover; background-position: center; background-attachment: fixed; padding: 80px 0;">
+<section id="form-pickup" class="position-relative d-flex align-items-center" style="min-height: 80vh; background: linear-gradient(rgba(23, 155, 174, 0.9), rgba(23, 155, 174, 0.9)), url('https://images.unsplash.com/photo-1545173168-9f1947eebb7f?q=80&w=2071&auto=format&fit=crop'); background-size: cover; background-position: center; background-attachment: fixed; padding: 80px 0;">
     
     <div class="container">
         <div class="row align-items-center justify-content-between">
@@ -438,7 +439,7 @@
                                 
                                 <!-- WhatsApp -->
                                 <div class="col-md-6">
-                                    <input type="number" class="form-control py-2 custom-input" placeholder="No Whatsapp" name="whatsapp" required>
+                                    <input type="number" class="form-control py-2 custom-input" placeholder="No Whatsapp" name="no_hp" required>
                                 </div>
                                 
                                 <!-- Alamat -->

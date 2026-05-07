@@ -32,4 +32,7 @@ Route::get('/customers/{id}', [CustomerController::class, 'show'])->name('custom
 Route::delete('/customers/{id}', [CustomerController::class, 'destroy'])->name('customers.destroy');
 // Halaman Transaksi
 Route::get('/transaksi', [CustomerController::class, 'indexTransaksi'])->name('transaksi.index');
+// Jalur buat update status order
+Route::put('/transaksi/{id}/status', [CustomerController::class, 'updateStatus'])->name('transaksi.updateStatus');
+Route::get('/transaksi/{id}', [CustomerController::class, 'showTransaksi'])->name('transaksi.show');
 Route::get('/syarat-ketentuan', function (){return view('syarat_ketentuan');})->name('syarat.ketentuan');
