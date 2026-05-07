@@ -113,9 +113,7 @@
                 </div>
 
                 <form action="{{ route('reservasi.store') }}" method="POST" class="row g-3">
-                    @csrf <!-- Wajib ada buat keamanan! -->
-                    
-                    <div class="col-md-4">
+                    @csrf <div class="col-md-4">
                         <input type="text" name="nama" class="form-control form-custom" placeholder="Nama Lengkap" required>
                     </div>
                     <div class="col-md-4">
@@ -125,17 +123,21 @@
                         <input type="number" name="no_hp" class="form-control form-custom" placeholder="WhatsApp" required>
                     </div>
                     
-                    <!-- Bagian Layanan & Waktu (Saran: Simpan ke tabel Orders nanti) -->
                     <div class="col-md-4">
-                        <select name="layanan" class="form-select form-custom">
-                            <option selected disabled>Pilih Layanan</option>
-                            <option value="Daily Kiloan">Daily Kiloan</option>
-                            <option value="Cuci & Setrika">Cuci & Setrika</option>
-                            <option value="Laundry Sepatu">Laundry Sepatu</option>
+                        <select name="service_id" class="form-select form-custom" required>
+                            <option value="" selected disabled>Pilih Layanan</option>
+                            <option value="1">Daily Kiloan</option>
+                            <option value="2">Cuci & Setrika</option>
+                            <option value="3">Laundry Sepatu</option>
                         </select>
                     </div>
-                    <div class="col-md-4"><input type="date" name="tgl_jemput" class="form-control form-custom"></div>
-                    <div class="col-md-4"><input type="time" name="jam_jemput" class="form-control form-custom"></div>
+                    
+                    <div class="col-md-4">
+                        <input type="date" name="tgl_jemput" class="form-control form-custom" required>
+                    </div>
+                    <div class="col-md-4">
+                        <input type="time" name="jam_jemput" class="form-control form-custom" required>
+                    </div>
 
                     <div class="col-12 mt-4 text-end">
                         <button type="submit" class="btn btn-navy px-5 py-3 shadow-sm" style="border-radius: 15px; background-color: #170C79; color: white; border: none; font-weight: bold;">
@@ -425,7 +427,8 @@
                 <div class="card border-0 shadow-lg" style="border-radius: 8px;">
                     <div class="card-body p-4 p-md-5 position-relative">
                         
-                        <form action="#" method="POST">
+                        <form action="{{ route('reservasi.store') }}" method="POST">
+                            @csrf
                             <div class="row g-3">
                                 
                                 <!-- Nama -->

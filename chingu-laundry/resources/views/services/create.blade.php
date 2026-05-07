@@ -22,7 +22,6 @@
                 <select name="satuan" class="form-select" required>
                     <option value="kg">Kilogram (kg)</option>
                     <option value="pcs">Pcs</option>
-                    <option value="m2">Meter Persegi (m2)</option>
                 </select>
             </div>
             <div class="mt-4">
