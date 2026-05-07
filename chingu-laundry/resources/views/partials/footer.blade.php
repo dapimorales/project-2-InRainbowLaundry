@@ -61,3 +61,24 @@
         </div>
     </div>
 </footer>
+<div class="py-3" style="background-color: #56B6C6; color: #EFE3CA;">
+    <div class="container">
+        <div class="row align-items-center">
+            <!-- Teks Copyright -->
+            <div class="col-md-6 text-center text-md-start small fw-bold">
+                Copyright © In Rainbow Laundry {{ date('Y') }}
+            </div>
+            <!-- Bagian Managed By -->
+            <div class="col-md-6 text-center text-md-end small">
+                <span class="fw-bold ms-2 d-inline-flex align-items-center">
+                    <!-- Warna stroke pada SVG juga diubah ke Beige agar seragam -->
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#EFE3CA" stroke-width="2" class="me-2">
+                        <path d="M4 3h16a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/>
+                        <circle cx="12" cy="13" r="5" stroke-dasharray="2 2"/>
+                    </svg>
+                    In Rainbow Laundry
+                </span>
+            </div>
+        </div>
+    </div>
+</div>

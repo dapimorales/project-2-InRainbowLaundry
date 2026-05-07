@@ -87,7 +87,7 @@
                 Dashboard Admin
             </a>
             
-            <a href="#form-reservasi" class="btn btn-navy px-4">
+            <a href="#" class="btn btn-navy px-4" data-bs-toggle="modal" data-bs-target="#modalReservasiNavbar">
                 Reservasi
             </a>
 
@@ -106,11 +106,11 @@
                         id="berandaDropdown">
                         Beranda
                     </a>
-                    <ul class="dropdown-menu shadow p-3">
-                        <li><a class="dropdown-item py-2" href="#about-us">Tentang Kami</a></li>
-                        <li><a class="dropdown-item py-2" href="#layanan">Layanan Kami</a></li>
-                        <li><a class="dropdown-item py-2" href="#form-reservasi">Jadwalkan Penjemputan</a></li>
-                        <li><a class="dropdown-item py-2" href="#testimoni">Testimoni</a></li>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="{{ url('/') }}#tentang-kami">Tentang Kami</a></li>
+                        <li><a class="dropdown-item" href="{{ url('/') }}#layanan-kami">Layanan Kami</a></li>
+                        <li><a class="dropdown-item" href="{{ url('/') }}#form-pickup">Jadwalkan Penjemputan</a></li>
+                        <li><a class="dropdown-item" href="{{ url('/') }}#testimoni">Testimoni</a></li>
                     </ul>
                 </li>
 
@@ -128,7 +128,57 @@
 
     </div>
 </nav>
+<div class="modal fade" id="modalReservasiNavbar" tabindex="-1" aria-labelledby="modalReservasiNavbarLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content" style="border-radius: 15px; border: none; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+            
+            <div class="modal-header border-0 pb-0 position-relative p-4">
+                <h3 class="modal-title fw-bold" id="modalReservasiNavbarLabel" style="color: #179BAE;">Reservasi Laundry</h3>
+                <button type="button" class="btn-close position-absolute top-0 end-0 mt-4 me-4" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            
+            <div class="modal-body p-4 pt-2">
+                <form action="#" method="POST">
+                    <div class="row g-4">
+                        
+                        <div class="col-md-6">
+                            <input type="text" class="form-control py-2 custom-modal-input" placeholder="Nama" name="nama" required>
+                        </div>
+                        <div class="col-md-6">
+                            <input type="text" class="form-control py-2 custom-modal-input" placeholder="Alamat" name="alamat" required>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <input type="number" class="form-control py-2 custom-modal-input" placeholder="Whatsapp" name="whatsapp" required>
+                        </div>
+                        <div class="col-md-6">
+                            <select class="form-select py-2 custom-modal-input" name="service_id" style="color: #6c757d;" required>
+                                <option value="" selected disabled>Daily Kiloan</option>
+                                <option value="1">Cuci Setrika Kiloan</option>
+                                <option value="2">Cuci Selimut</option>
+                                <option value="3">Cuci Sepatu</option>
+                            </select>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <input type="text" class="form-control py-2 custom-modal-input" placeholder="Tanggal Penjemputan" name="tgl_jemput" onfocus="(this.type='date')" onblur="(this.type='text')" required>
+                        </div>
+                        <div class="col-md-6">
+                            <input type="text" class="form-control py-2 custom-modal-input" placeholder="Jam Penjemputan" name="jam_jemput" onfocus="(this.type='time')" onblur="(this.type='text')" required>
+                        </div>
 
+                        <div class="col-12 mt-4">
+                            <button type="submit" class="btn text-white px-4 py-2 fw-bold" style="background-color: #179BAE; border-radius: 6px;">
+                                Pickup Sekarang <i class="fa-solid fa-truck-fast ms-1"></i>
+                            </button>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 <script>
     let lastScrollTop = 0;
     const navbar = document.querySelector(".navbar");

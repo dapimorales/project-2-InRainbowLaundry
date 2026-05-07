@@ -43,6 +43,18 @@
     .custom-input::placeholder {
         color: #adb5bd;
     }
+    .custom-modal-input {
+        border: 1px solid #dce2e6;
+        border-radius: 4px;
+        color: #495057;
+    }
+    .custom-modal-input:focus {
+        border-color: #179BAE;
+        box-shadow: 0 0 0 0.2rem rgba(23, 155, 174, 0.25);
+    }
+    .custom-modal-input::placeholder {
+        color: #adb5bd;
+    }
 </style>
 @include('partials.navbar')
 
@@ -525,29 +537,9 @@
 
 @include('partials.footer')
 
-<!-- COPYRIGHT BAR (Updated: Sea Blue with Navy Text) -->
-<!-- Copyright Bar dengan Teks Warna Beige (#EFE3CA) -->
-<div class="py-3" style="background-color: #56B6C6; color: #EFE3CA;">
-    <div class="container">
-        <div class="row align-items-center">
-            <!-- Teks Copyright -->
-            <div class="col-md-6 text-center text-md-start small fw-bold">
-                Copyright © In Rainbow Laundry {{ date('Y') }}
-            </div>
-            <!-- Bagian Managed By -->
-            <div class="col-md-6 text-center text-md-end small">
-                <span class="fw-bold ms-2 d-inline-flex align-items-center">
-                    <!-- Warna stroke pada SVG juga diubah ke Beige agar seragam -->
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#EFE3CA" stroke-width="2" class="me-2">
-                        <path d="M4 3h16a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/>
-                        <circle cx="12" cy="13" r="5" stroke-dasharray="2 2"/>
-                    </svg>
-                    In Rainbow Laundry
-                </span>
-            </div>
-        </div>
-    </div>
-</div>
+
+
+
 <script>
 let lastScrollTop = 0;
 const navbar = document.querySelector(".navbar");
@@ -566,5 +558,6 @@ window.addEventListener("scroll", function () {
 });
 </script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 </html>
