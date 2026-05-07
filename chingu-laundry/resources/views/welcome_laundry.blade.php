@@ -148,7 +148,7 @@
     </div>
 </section>
 
-<section class="py-5" style="background-color: #ffffff;">
+<section id="layanan-kami" class="py-5" style="background-color: #ffffff;">
     <div class="container">
         <div class="text-center mb-5">
             <h6 class="fw-bold text-uppercase" style="letter-spacing: 2px; color: #56B6C6;">Layanan Unggulan</h6>
@@ -286,7 +286,7 @@
     }
 </style>
 
-<section class="py-5" style="background-color: #fcfaf2;">
+<section id="tentang-kami" class="py-5" style="background-color: #fcfaf2;">
     <div class="container py-md-5">
         <div class="row align-items-center">
             
@@ -331,7 +331,7 @@
     </div>
 </section>
 
-<section class="py-5" style="background-color: #ffffff;">
+<section id="form-pickup" class="py-5" style="background-color: #ffffff;">
     <div class="container py-md-5">
         <div class="text-center mb-5">
             <h6 class="fw-bold text-uppercase" style="letter-spacing: 2px; color: #56B6C6;">Keunggulan Kami</h6>
@@ -492,7 +492,7 @@
 </style>
 
 <!-- SECTION TESTIMONI (Update: Clean White with Silhouette) -->
-<section class="py-5 position-relative" style="background-color: #ffffff; border-radius: 60px 60px 0 0; margin-top: 50px;">
+<section id="testimoni" class="py-5 position-relative" style="background-color: #ffffff; border-radius: 60px 60px 0 0; margin-top: 50px;">
     <!-- Siluet Mesin Cuci (Sea Blue Tipis) -->
     <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: url('https://img.icons8.com/ios/100/56B6C6/washing-machine.png'); background-repeat: repeat; background-size: 100px; opacity: 0.04; z-index: 0;"></div>
 
