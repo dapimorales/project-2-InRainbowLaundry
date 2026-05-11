@@ -41,22 +41,32 @@ class MembershipController extends Controller
 
         $paket = $paketInfo[$request->paket_dipilih];
 
-        // --- SIMPAN KE DATABASE (uncomment kalau sudah ada tabel memberships) ---
-        // \App\Models\Membership::create([
-        //     'nama_lengkap'   => $request->nama_lengkap,
-        //     'alamat_lengkap' => $request->alamat_lengkap,
-        //     'kota'           => $request->kota,
-        //     'kode_pos'       => $request->kode_pos,
-        //     'email'          => $request->email,
-        //     'nomor_whatsapp' => $request->nomor_whatsapp,
-        //     'tanggal_lahir'  => $request->tanggal_lahir,
-        //     'paket'          => $request->paket_dipilih,
-        //     'harga'          => $paket['harga'],
-        //     'bonus_saldo'    => $paket['bonus_saldo'],
-        // ]);
+        // --- SIMPAN KE DATABASE 
+        \App\Models\Membership::create([
+            'nama_lengkap'   => $request->nama_lengkap,
+            'alamat_lengkap' => $request->alamat_lengkap,
+            'kota'           => $request->kota,
+            'kode_pos'       => $request->kode_pos,
+            'email'          => $request->email,
+            'nomor_whatsapp' => $request->nomor_whatsapp,
+            'tanggal_lahir'  => $request->tanggal_lahir,
+            'paket'          => $request->paket_dipilih,
+            'harga'          => $paket['harga'],
+            'bonus_saldo'    => $paket['bonus_saldo'],
+        ]);
 
-        // Redirect balik ke halaman syarat ketentuan dengan pesan sukses
-        return redirect()->route('syarat.ketentuan')
-            ->with('success', 'Pendaftaran membership ' . $paket['label'] . ' berhasil! Tim kami akan segera menghubungi Anda.');
+        $noAdmin = '6285710465321'; 
+
+        // 2. Bikin format pesan otomatisnya
+        $pesanWA = "Halo Admin Dapi Laundry! 🧺\n\n";
+        $pesanWA .= "Saya *" . $request->nama_lengkap . "* baru saja mendaftar Membership *" . $paket['label'] . "*.\n\n";
+        $pesanWA .= "Total Tagihan: *Rp " . number_format($paket['harga'], 0, ',', '.') . "*\n\n";
+        $pesanWA .= "Saya mau konfirmasi pembayaran nih, untuk transfernya ke rekening mana ya?";
+
+        // 3. Ubah pesan jadi format link URL
+       $linkWhatsApp = "https://api.whatsapp.com/send?phone=" . $noAdmin . "&text=" . urlencode($pesanWA);
+
+        // 4. Lempar pelanggan langsung ke aplikasi WhatsApp
+        return redirect()->away($linkWhatsApp);
     }
 }
