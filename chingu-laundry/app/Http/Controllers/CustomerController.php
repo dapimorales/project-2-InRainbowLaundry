@@ -120,4 +120,32 @@ public function updateStatus(Request $request, $id)
     // 4. Balik lagi ke halaman detail dengan pesan sukses
     return redirect()->back()->with('success', 'Status order berhasil diupdate, Masbro!');
 }
+// Nampilin halaman awal form lacak
+    public function halamanCekStatus()
+    {
+        return view('cek_status'); // Sesuaikan sama nama file blade lu
+    }
+
+    // Proses pencarian data pesanan dan membership
+    public function lacakStatus(\Illuminate\Http\Request $request)
+    {
+        $request->validate([
+            'invoice' => 'required'
+        ]);
+
+        // 1. Cari data pesanan berdasarkan No Faktur (beserta data customernya)
+        $order = \App\Models\Order::with(['customer', 'orderDetails.service'])
+                    ->where('kode_invoice', $request->invoice)
+                    ->first();
+
+        $membership = null; // Default kosongin dulu
+
+        // 2. Kalau pesanannya ketemu, kita cek nomor HP-nya di tabel membership!
+        if ($order && $order->customer) {
+            $membership = \App\Models\Membership::where('nomor_whatsapp', $order->customer->no_hp)->first();
+        }
+
+        // Lempar datanya kembali ke halaman cek_status
+        return view('cek_status', compact('order', 'membership'))->with('searched', true);
+    }
 }

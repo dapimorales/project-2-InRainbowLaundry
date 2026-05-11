@@ -42,3 +42,9 @@ Route::get('/syarat-ketentuan', function () {
 
 // Membership ← TAMBAH INI
 Route::post('/membership/store', [MembershipController::class, 'store'])->name('membership.store');
+
+// Halaman Cek Status
+Route::get('/cek-status', [\App\Http\Controllers\CustomerController::class, 'halamanCekStatus'])->name('cek-status.index');
+
+// Proses Pencarian/Tracking
+Route::post('/cek-status/lacak', [\App\Http\Controllers\CustomerController::class, 'lacakStatus'])->name('cek-status.lacak');

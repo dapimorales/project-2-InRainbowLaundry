@@ -115,7 +115,7 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link text-navy fw-semibold" href="#">Cek Status Cucianmu</a>
+                    <a class="nav-link text-navy fw-semibold" href="{{ route('cek-status.index') }}">Cek Status Cucianmu</a>
                 </li>
                 
                 <li class="nav-item">
