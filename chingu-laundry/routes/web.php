@@ -1,8 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ServiceController; // Pindahin ke atas biar rapi
+use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\MembershipController; // ← TAMBAH INI
 
 /*
 |--------------------------------------------------------------------------
@@ -16,23 +17,28 @@ Route::get('/', function () {
 })->name('home');
 
 // Halaman Daftar Layanan (Dashboard Admin)
-// Akses di: localhost:8000/layanan
 Route::get('/layanan', [ServiceController::class, 'index'])->name('layanan.index');
-// Halaman Utama Dashboard Admin
-// Route untuk Proses Simpan Data (Buat fitur nambah layanan nanti)
 Route::post('/layanan', [ServiceController::class, 'store'])->name('layanan.store');
-// Route buat nampilin form tambah
 Route::get('/layanan/tambah', [ServiceController::class, 'create'])->name('layanan.create');
 Route::get('/layanan/{id}/edit', [ServiceController::class, 'edit'])->name('layanan.edit');
 Route::put('/layanan/{id}', [ServiceController::class, 'update'])->name('layanan.update');
 Route::delete('/layanan/{id}', [ServiceController::class, 'destroy'])->name('layanan.destroy');
+
+// Customers
 Route::get('/customers', [CustomerController::class, 'index'])->name('customers.index');
 Route::post('/reservasi', [CustomerController::class, 'storeReservasi'])->name('reservasi.store');
 Route::get('/customers/{id}', [CustomerController::class, 'show'])->name('customers.show');
 Route::delete('/customers/{id}', [CustomerController::class, 'destroy'])->name('customers.destroy');
-// Halaman Transaksi
+
+// Transaksi
 Route::get('/transaksi', [CustomerController::class, 'indexTransaksi'])->name('transaksi.index');
-// Jalur buat update status order
 Route::put('/transaksi/{id}/status', [CustomerController::class, 'updateStatus'])->name('transaksi.updateStatus');
 Route::get('/transaksi/{id}', [CustomerController::class, 'showTransaksi'])->name('transaksi.show');
-Route::get('/syarat-ketentuan', function (){return view('syarat_ketentuan');})->name('syarat.ketentuan');
+
+// Syarat & Ketentuan
+Route::get('/syarat-ketentuan', function () {
+    return view('syarat_ketentuan');
+})->name('syarat.ketentuan');
+
+// Membership ← TAMBAH INI
+Route::post('/membership/store', [MembershipController::class, 'store'])->name('membership.store');
