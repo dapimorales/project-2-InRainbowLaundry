@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\CustomerController;
-use App\Http\Controllers\MembershipController; // ← TAMBAH INI
+use App\Http\Controllers\MembershipController;
 
 /*
 |--------------------------------------------------------------------------
@@ -40,8 +40,11 @@ Route::get('/syarat-ketentuan', function () {
     return view('syarat_ketentuan');
 })->name('syarat.ketentuan');
 
-// Membership ← TAMBAH INI
+// Membership
 Route::post('/membership/store', [MembershipController::class, 'store'])->name('membership.store');
+Route::post('/membership/login', [MembershipController::class, 'login'])->name('membership.login');
+Route::post('/membership/logout', [MembershipController::class, 'logout'])->name('membership.logout');
+Route::post('/membership/perpanjang', [MembershipController::class, 'perpanjang'])->name('membership.perpanjang');
 
 // Halaman Cek Status
 Route::get('/cek-status', [\App\Http\Controllers\CustomerController::class, 'halamanCekStatus'])->name('cek-status.index');
