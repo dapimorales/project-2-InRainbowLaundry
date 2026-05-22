@@ -46,7 +46,11 @@
                             @endif
                         </td>
                         <td>
-                            <a href="{{ route('transaksi.show', $order->id) }}" class="btn btn-info btn-sm text-white">Detail</a>
+                            <a href="{{ route('transaksi.show', $order->id) }}" class="btn btn-info btn-sm text-white mb-1">Detail</a>
+                            
+                            <a href="{{ route('transaksi.cetak', $order->id) }}" target="_blank" class="btn btn-warning btn-sm text-dark fw-bold mb-1">
+                                <i class="fa-solid fa-print"></i> Cetak
+                            </a>
                         </td>
                     </tr>
                     @empty

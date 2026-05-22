@@ -39,8 +39,8 @@ class MembershipController extends Controller
 
         $paket = $paketInfo[$request->paket_dipilih];
 
-        // Simpan ke database
-        Membership::create([
+        // TANGKAP DATANYA KE VARIABEL $member & UBAH STATUS JADI PENDING
+        $member = Membership::create([
             'nama_lengkap'   => $request->nama_lengkap,
             'alamat_lengkap' => $request->alamat_lengkap,
             'kota'           => $request->kota,
@@ -55,19 +55,11 @@ class MembershipController extends Controller
             'saldo'          => $paket['bonus_saldo'],
             'tgl_mulai'      => Carbon::today(),
             'tgl_expired'    => Carbon::today()->addMonth(),
-            'status'         => 'aktif',
+            'status'         => 'pending', // <--- INI UDAH JADI PENDING
         ]);
 
-        // Redirect ke WhatsApp admin
-        $noAdmin  = '6285710465321';
-        $pesanWA  = "Halo Admin Dapi Laundry! 🧺\n\n";
-        $pesanWA .= "Saya *" . $request->nama_lengkap . "* baru saja mendaftar Membership *" . $paket['label'] . "*.\n\n";
-        $pesanWA .= "Total Tagihan: *Rp " . number_format($paket['harga'], 0, ',', '.') . "*\n\n";
-        $pesanWA .= "Saya mau konfirmasi pembayaran nih, untuk transfernya ke rekening mana ya?";
-
-        $linkWhatsApp = "https://api.whatsapp.com/send?phone=" . $noAdmin . "&text=" . urlencode($pesanWA);
-
-        return redirect()->away($linkWhatsApp);
+        // REDIRECT LANGSUNG KE HALAMAN DUMMY PAYMENT (BLOK WA UDAH DIHAPUS)
+        return redirect()->route('dummy.bayar', $member->id);
     }
 
     // =====================

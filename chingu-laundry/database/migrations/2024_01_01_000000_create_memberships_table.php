@@ -24,6 +24,9 @@ return new class extends Migration
         $table->integer('harga');
         $table->integer('bonus_saldo');
         $table->timestamps();
+        $table->date('tgl_mulai');
+        $table->date('tgl_expired');
+        $table->string('status')->default('aktif');
     });
     }
 

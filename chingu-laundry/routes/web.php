@@ -1,9 +1,10 @@
 <?php
-
+use App\Models\Service;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\MembershipController;
+use App\Http\Controllers\PaymentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,7 +14,11 @@ use App\Http\Controllers\MembershipController;
 
 // Halaman Landing Page (In Rainbow Laundry)
 Route::get('/', function () {
-    return view('welcome_laundry');
+    // 1. Ambil semua data layanan dari database
+    $services = Service::all();
+    
+    // 2. Lempar data $services itu ke halaman welcome_laundry pakai compact
+    return view('welcome_laundry', compact('services'));
 })->name('home');
 
 // Halaman Daftar Layanan (Dashboard Admin)
@@ -51,3 +56,8 @@ Route::get('/cek-status', [\App\Http\Controllers\CustomerController::class, 'hal
 
 // Proses Pencarian/Tracking
 Route::post('/cek-status/lacak', [\App\Http\Controllers\CustomerController::class, 'lacakStatus'])->name('cek-status.lacak');
+//proses cetak invoice
+Route::get('/transaksi/{id}/cetak', [CustomerController::class, 'cetakInvoice'])->name('transaksi.cetak');
+//payment dummy
+Route::get('/pembayaran-membership/{id}', [PaymentController::class, 'show'])->name('dummy.bayar');
+Route::post('/pembayaran-membership/{id}/proses', [PaymentController::class, 'process'])->name('dummy.proses');

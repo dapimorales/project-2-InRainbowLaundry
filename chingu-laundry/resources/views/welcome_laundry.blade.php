@@ -432,49 +432,55 @@
                             @csrf
                             <div class="row g-3">
                                 
-                                <!-- Nama -->
                                 <div class="col-md-6">
                                     <input type="text" class="form-control py-2 custom-input" placeholder="Nama" name="nama" required>
                                 </div>
                                 
-                                <!-- WhatsApp -->
                                 <div class="col-md-6">
                                     <input type="number" class="form-control py-2 custom-input" placeholder="No Whatsapp" name="no_hp" required>
                                 </div>
                                 
-                                <!-- Alamat -->
                                 <div class="col-12">
-                                    <input type="text" class="form-control py-2 custom-input" placeholder="Alamat" name="alamat" required>
+                                    <input type="text" class="form-control py-2 custom-input" placeholder="Alamat Lengkap" name="alamat" required>
                                 </div>
                                 
-                                <!-- Layanan -->
-                                <div class="col-md-5">
-                                    <select class="form-select py-2 custom-input" name="service_id" style="color: #179BAE;" required>
-                                        <option value="" selected disabled>Daily Kiloan</option>
-                                        <option value="1" style="color: #333;">Cuci Setrika Kiloan</option>
-                                        <option value="2" style="color: #333;">Cuci Selimut</option>
-                                        <option value="3" style="color: #333;">Cuci Sepatu</option>
+                                <div class="col-12">
+                                    <select class="form-select py-2 custom-input" name="service_id" id="layanan_id" style="color: #179BAE;" required onchange="hitungTotal()">
+                                        <option value="" data-harga="0" data-satuan="" selected disabled>Pilih Layanan Kiloan...</option>
+                                        
+                                        @foreach($services as $s)
+                                            <option value="{{ $s->id }}" data-harga="{{ $s->harga }}" data-satuan="{{ $s->satuan }}" style="color: #333;">
+                                                {{ $s->nama_layanan }} (Rp {{ number_format($s->harga, 0, ',', '.') }})
+                                            </option>
+                                        @endforeach
                                     </select>
                                 </div>
-                                
-                                <!-- Tanggal Jemput (Pake trik onfocus biar placeholder text tetep muncul sblm diklik) -->
-                                <div class="col-md-4">
+
+                                <div class="col-12">
+                                    <input type="number" id="qty" name="qty" class="form-control py-2 custom-input" placeholder="Berapa Kg/Pcs?" required min="1" oninput="hitungTotal()">
+                                </div>
+
+                                <div class="col-md-6">
                                     <input type="text" class="form-control py-2 custom-input" placeholder="Tanggal Jemput" name="tgl_jemput" onfocus="(this.type='date')" onblur="(this.type='text')" required>
                                 </div>
                                 
-                                <!-- Jam Jemput -->
-                                <div class="col-md-3">
+                                <div class="col-md-6">
                                     <input type="text" class="form-control py-2 custom-input" placeholder="Jam Jemput" name="jam_jemput" onfocus="(this.type='time')" onblur="(this.type='text')" required>
                                 </div>
 
-                                <!-- Pesan (Textarea) -->
                                 <div class="col-12">
-                                    <textarea class="form-control py-2 custom-input" rows="4" placeholder="Pesan" name="pesan"></textarea>
+                                    <textarea class="form-control py-2 custom-input" rows="3" placeholder="Pesan Tambahan (Opsional)" name="pesan"></textarea>
+                                </div>
+
+                                <div class="col-12 mt-2">
+                                    <div class="d-flex justify-content-between align-items-center p-3 rounded" style="background-color: rgba(23, 155, 174, 0.1); border: 1px dashed #179BAE;">
+                                        <span class="fw-bold text-navy" style="font-size: 0.9rem;">Estimasi Total:</span>
+                                        <span class="fw-bold text-danger fs-5" id="tampil_total">Rp 0</span>
+                                    </div>
                                 </div>
                                 
-                                <!-- Tombol Submit -->
-                                <div class="col-12 mt-4 position-relative">
-                                    <button type="submit" class="btn w-100 py-3 fw-bold text-white d-flex justify-content-center align-items-center gap-2" style="background-color: #179BAE; border-radius: 5px;">
+                                <div class="col-12 mt-3 position-relative">
+                                    <button type="submit" class="btn w-100 py-3 fw-bold text-white d-flex justify-content-center align-items-center gap-2" style="background-color: #179BAE; border-radius: 5px; transition: 0.3s;">
                                         Pickup Now <i class="fa-solid fa-truck-fast"></i>
                                     </button>
                                 </div>
@@ -562,6 +568,22 @@ window.addEventListener("scroll", function () {
 });
 </script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    function hitungTotal() {
+        let select = document.getElementById('layanan_id');
+        let selectedOption = select.options[select.selectedIndex];
+        
+        let harga = selectedOption.getAttribute('data-harga');
+        let qty = document.getElementById('qty').value;
+        let tampilTotal = document.getElementById('tampil_total');
 
+        if (harga > 0 && qty > 0) {
+            let total = harga * qty;
+            tampilTotal.innerText = 'Rp ' + new Intl.NumberFormat('id-ID').format(total);
+        } else {
+            tampilTotal.innerText = 'Rp 0';
+        }
+    }
+</script>
 </body>
 </html>

@@ -25,12 +25,13 @@ class CustomerController extends Controller
     }
     public function storeReservasi(\Illuminate\Http\Request $request)
 {
-    // 1. Validasi
+    // 1. Validasi (Tambahin qty di sini biar wajib diisi)
     $request->validate([
         'nama'       => 'required',
         'no_hp'      => 'required', 
         'alamat'     => 'required',
         'service_id' => 'required',
+        'qty'        => 'required|numeric|min:1', // INI TAMBAHANNYA
         'tgl_jemput' => 'required',
         'jam_jemput' => 'required',
     ]);
@@ -49,29 +50,35 @@ class CustomerController extends Controller
 
     // GABUNGKAN Tanggal dan Jam (Format SQL: YYYY-MM-DD HH:MM:SS)
     $waktuLengkap = $request->tgl_jemput . ' ' . $request->jam_jemput . ':00';
-    //subtotal harga
+    
+    // --- START PERUBAHAN HITUNG-HITUNGAN MASBRO ---
     $layanan = \App\Models\Service::find($request->service_id);
-    $harga = $layanan ? $layanan->harga : 0; // Kalo ketemu ambil harganya, kalo nggak 0
-    $qty_awal = 1; // Default awal diset 1 dulu pas pickup
-    $subtotal_awal = $harga * $qty_awal;
+    $harga = $layanan ? $layanan->harga : 0; 
+    
+    // Ambil angka qty dari form yang diketik pelanggan!
+    $qty_input = $request->qty; 
+    
+    // Rumus sakti: Harga dikali Qty dari form
+    $total_harga_asli = $harga * $qty_input;
+    // --- END PERUBAHAN ---
 
     // 3. Simpan ke tabel orders
     $order = \App\Models\Order::create([
         'kode_invoice' => $kodeInvoice,
         'customer_id'  => $customer->id, 
-        'tgl_masuk'    => $waktuLengkap, // Sekarang sudah bisa masuk sekaligus jamnya
+        'tgl_masuk'    => $waktuLengkap, 
         'tgl_selesai'  => null,
-        'total_harga'  => $subtotal_awal, 
-        'status_order' => 'baru',  // Pakai 'baru' sesuai ENUM di DB
-        'status_bayar' => 'belum', // Pakai 'belum' sesuai ENUM di DB
+        'total_harga'  => $total_harga_asli, // Pake hasil perkalian yang baru
+        'status_order' => 'baru',  
+        'status_bayar' => 'belum', 
     ]);
 
     // 4. Simpan ke tabel order_details
     \App\Models\OrderDetail::create([
         'order_id'   => $order->id,
         'service_id' => $request->service_id,
-        'qty'        => 1,
-        'subtotal'   => $subtotal_awal,
+        'qty'        => $qty_input, // Simpan qty yang asli ke database
+        'subtotal'   => $total_harga_asli, // Simpan subtotalnya
     ]);
 
     return redirect()->back()->with('success', 'Tunggu ya masbro, kurir kami segera meluncur!');
@@ -81,7 +88,14 @@ public function show($id)
     $customer = Customer::with('orders')->findOrFail($id);
     return view('customers.show', compact('customer'));
 }
-
+public function cetakInvoice($id)
+{
+    // Ambil data order, sekalian narik data customer dan detail layanannya
+    $order = \App\Models\Order::with(['customer', 'orderDetails.service'])->findOrFail($id);
+    
+    // UBAH DI SINI: Tambahin 'transaksi.' di depan nama file
+    return view('transaksi.cetak_invoice', compact('order'));
+}
 // Menghapus data pelanggan
 public function destroy($id)
 {
