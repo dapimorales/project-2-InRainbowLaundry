@@ -50,6 +50,9 @@
                         Pelanggan
                     </a>
                 </li>
+                <li>
+                    <a href="{{ route('admin.membership') }}" class="nav-link">Data Membership</a>
+                </li>
                 <li class="nav-item">
                     <a href="{{ route('transaksi.index') }}" class="nav-link">
                         Transaksi

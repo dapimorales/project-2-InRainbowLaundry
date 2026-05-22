@@ -284,7 +284,13 @@
                 </div>
             </div>
             <div class="mb-3">
-                <input type="email" class="form-control" name="email" placeholder="Email" required>
+                <input type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" placeholder="Email" required>
+                
+                @error('email')
+                    <div class="invalid-feedback text-start mt-1" style="font-size: 13px;">
+                        {{ $message }}
+                    </div>
+                @enderror
             </div>
             {{-- Password buat login --}}
             <div class="mb-3">
@@ -481,6 +487,12 @@
 
     @if(session('login_success') || session('login_error') || session('perpanjang_success'))
         window.addEventListener('load', () => bukaLoginMember());
+    @endif
+    @if($errors->any())
+        window.addEventListener('load', () => {
+            document.getElementById('modalMembership').classList.add('aktif');
+            document.body.style.overflow = 'hidden';
+        });
     @endif
 </script>
 </body>

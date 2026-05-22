@@ -5,6 +5,7 @@ use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\MembershipController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\AdminMembershipController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,7 +21,8 @@ Route::get('/', function () {
     // 2. Lempar data $services itu ke halaman welcome_laundry pakai compact
     return view('welcome_laundry', compact('services'));
 })->name('home');
-
+// Pastikan ada ->name('admin.membership') 
+Route::get('/dashboard-admin/membership', [AdminMembershipController::class, 'index'])->name('admin.membership');
 // Halaman Daftar Layanan (Dashboard Admin)
 Route::get('/layanan', [ServiceController::class, 'index'])->name('layanan.index');
 Route::post('/layanan', [ServiceController::class, 'store'])->name('layanan.store');
