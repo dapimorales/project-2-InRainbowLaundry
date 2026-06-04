@@ -36,6 +36,9 @@ Route::get('/customers', [CustomerController::class, 'index'])->name('customers.
 Route::post('/reservasi', [CustomerController::class, 'storeReservasi'])->name('reservasi.store');
 Route::get('/customers/{id}', [CustomerController::class, 'show'])->name('customers.show');
 Route::delete('/customers/{id}', [CustomerController::class, 'destroy'])->name('customers.destroy');
+// Route buat Export Data Pelanggan
+Route::get('/pelanggan/export/pdf', [\App\Http\Controllers\CustomerController::class, 'exportPdf'])->name('pelanggan.pdf');
+Route::get('/pelanggan/export/excel', [\App\Http\Controllers\CustomerController::class, 'exportExcel'])->name('pelanggan.excel');
 
 // Transaksi
 Route::get('/transaksi', [CustomerController::class, 'indexTransaksi'])->name('transaksi.index');

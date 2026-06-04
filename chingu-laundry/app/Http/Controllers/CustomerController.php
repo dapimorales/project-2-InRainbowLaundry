@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 use App\Models\Customer;
 use Illuminate\Http\Request;
 use App\Models\Order;
+use Maatwebsite\Excel\Facades\Excel;
+use Barryvdh\DomPDF\Facade\Pdf;
+use App\Exports\CustomerExport;
 
 class CustomerController extends Controller
 {
@@ -161,5 +164,20 @@ public function updateStatus(Request $request, $id)
 
         // Lempar datanya kembali ke halaman cek_status
         return view('cek_status', compact('order', 'membership'))->with('searched', true);
+    }
+    // FUNGSI EXCEL PELANGGAN
+    public function exportExcel()
+    {
+        return Excel::download(new CustomerExport, 'Data_Pelanggan_DapiLaundry.xlsx');
+    }
+
+    // FUNGSI PDF PELANGGAN
+    public function exportPdf()
+    {
+        $customers = \App\Models\Customer::all();
+        $totalCustomer = $customers->count();
+        
+        $pdf = Pdf::loadView('customers.pdf_view', compact('customers', 'totalCustomer'));
+        return $pdf->download('Data_Pelanggan_DapiLaundry.pdf');
     }
 }
