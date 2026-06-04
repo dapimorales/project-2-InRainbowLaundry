@@ -4,6 +4,15 @@
 <div class="container-fluid p-4">
     <h2 class="mb-4">Data Membership</h2>
 
+    <div class="mb-4">
+        <a href="{{ route('membership.pdf') }}" class="btn btn-danger text-white me-2">
+            <i class="fa-solid fa-file-pdf"></i> Export PDF
+        </a>
+        <a href="{{ route('membership.excel') }}" class="btn btn-success text-white">
+            <i class="fa-solid fa-file-excel"></i> Export Excel
+        </a>
+    </div> 
+
     <div class="row mb-4">
         <div class="col-md-6">
             <div class="card shadow-sm border-0 bg-success text-white">

@@ -7,6 +7,9 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 use App\Models\Membership;
 use Carbon\Carbon;
+use Maatwebsite\Excel\Facades\Excel;
+use Barryvdh\DomPDF\Facade\Pdf;
+use App\Exports\MembershipExport;
 
 class MembershipController extends Controller
 {
@@ -142,5 +145,30 @@ class MembershipController extends Controller
         $linkWhatsApp = "https://api.whatsapp.com/send?phone=" . $noAdmin . "&text=" . urlencode($pesanWA);
 
         return redirect()->away($linkWhatsApp);
+    }
+    // FUNGSI BUAT CETAK EXCEL
+    public function exportExcel()
+    {
+        return Excel::download(new MembershipExport, 'Data_Membership_DapiLaundry.xlsx');
+    }
+
+    // FUNGSI BUAT CETAK PDF
+    public function exportPdf()
+    {
+        // 1. Ambil semua data membership buat di-looping di dalam tabel PDF
+        $memberships = Membership::all();
+        
+        // 2. HITUNG TOTAL MEMBER AKTIF
+        // Menghitung jumlah baris yang kolom statusnya berisi tulisan 'aktif'
+        $totalMember = Membership::where('status', 'aktif')->count();
+        
+        // 3. HITUNG TOTAL PENDAPATAN REAL-TIME
+        // Menjumlahkan semua nominal di kolom 'harga' hanya dari member yang statusnya 'aktif' (sudah bayar)
+        $totalPendapatan = Membership::where('status', 'aktif')->sum('harga');
+        
+        // 4. Lempar data memberships, totalMember, dan totalPendapatan ke tampilan PDF
+        $pdf = Pdf::loadView('membership.pdf_view', compact('memberships', 'totalMember', 'totalPendapatan'));
+        
+        return $pdf->download('Data_Membership_DapiLaundry.pdf');
     }
 }

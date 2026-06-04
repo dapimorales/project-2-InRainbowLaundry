@@ -52,6 +52,9 @@ Route::post('/membership/store', [MembershipController::class, 'store'])->name('
 Route::post('/membership/login', [MembershipController::class, 'login'])->name('membership.login');
 Route::post('/membership/logout', [MembershipController::class, 'logout'])->name('membership.logout');
 Route::post('/membership/perpanjang', [MembershipController::class, 'perpanjang'])->name('membership.perpanjang');
+// Route buat Export Laporan Membership
+Route::get('/membership/export/pdf', [\App\Http\Controllers\MembershipController::class, 'exportPdf'])->name('membership.pdf');
+Route::get('/membership/export/excel', [\App\Http\Controllers\MembershipController::class, 'exportExcel'])->name('membership.excel');
 
 // Halaman Cek Status
 Route::get('/cek-status', [\App\Http\Controllers\CustomerController::class, 'halamanCekStatus'])->name('cek-status.index');
