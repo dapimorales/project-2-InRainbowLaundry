@@ -13,6 +13,18 @@
     </div>
 @endif
 
+<!-- ALARM JADWAL AMBIL BERSIH DARI PELANGGAN -->
+@if($order->rencana_ambil)
+    <div class="alert alert-info d-flex align-items-center shadow-sm border-info mb-4" role="alert">
+        <i class="fa-solid fa-bell fs-3 me-3 text-warning"></i>
+        <div>
+            <h5 class="alert-heading fw-bold mb-1">Perhatian Admin!</h5>
+            <p class="mb-0">Pelanggan sudah melakukan reservasi untuk mengambil cucian ini pada: 
+                <strong class="text-danger fs-5">{{ \Carbon\Carbon::parse($order->rencana_ambil)->format('d F Y, H:i') }}</strong>
+            </p>
+        </div>
+    </div>
+@endif
 <div class="row">
     <div class="col-md-4">
         <div class="card shadow-sm mb-4">
@@ -37,6 +49,20 @@
                             <option value="diambil" {{ $order->status_order == 'diambil' ? 'selected' : '' }}>Sudah Diambil</option>
                         </select>
                         <button type="submit" class="btn btn-primary">Update</button>
+                    </div>
+                </form>
+                <hr class="my-3">
+                <form action="{{ route('transaksi.update_pembayaran', $order->id) }}" method="POST">
+                    @csrf
+                    @method('PUT')
+                    
+                    <label class="fw-bold mb-2">Update Pembayaran:</label>
+                    <div class="input-group">
+                        <select name="status_bayar" class="form-select fw-bold {{ $order->status_bayar == 'lunas' ? 'text-success' : 'text-danger' }}">
+                            <option value="belum" {{ $order->status_bayar == 'belum' ? 'selected' : '' }}>Belum Lunas</option>
+                            <option value="lunas" {{ $order->status_bayar == 'lunas' ? 'selected' : '' }}>Lunas</option>
+                        </select>
+                        <button type="submit" class="btn btn-success fw-bold">Simpan</button>
                     </div>
                 </form>
                 </div>
@@ -86,6 +112,21 @@
                         </tr>
                     </tfoot>
                 </table>
+                <div class="mt-4 p-3 rounded" style="background-color: #fcfaf2; border: 1px dashed #179BAE;">
+                    <form action="{{ route('transaksi.update_berat', $order->id) }}" method="POST" class="d-flex align-items-center gap-3">
+                        @csrf
+                        @method('PUT')
+                        
+                        <label class="fw-bold mb-0 text-navy" style="white-space: nowrap;">Input Berat Asli (Kg/Pcs):</label>
+                        
+                        <input type="number" name="qty" class="form-control" style="width: 100px; border-color: #179BAE;" 
+                            value="{{ $order->orderDetails->first()->qty ?? 0 }}" required min="1">
+                            
+                        <button type="submit" class="btn text-white fw-bold px-4" style="background-color: #179BAE; border-radius: 5px;">
+                            Update Harga <i class="fa-solid fa-calculator ms-1"></i>
+                        </button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>

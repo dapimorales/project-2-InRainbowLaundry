@@ -35,7 +35,7 @@
             <ul class="nav flex-column gap-2">
                 <li class="nav-item">
                     <!-- Kalau URL-nya cuma '/' atau 'dashboard', dia aktif -->
-                    <a class="nav-link {{ request()->is('dashboard') || request()->is('/') ? 'active' : '' }}" href="/">
+                    <a class="nav-link {{ request()->is('dashboard') || request()->is('/') ? 'active' : '' }}" href="dashboard">
                         Dashboard
                     </a>
                 </li>
@@ -58,6 +58,16 @@
                         Transaksi
                     </a>
                 </li>
+                <li class="nav-item mt-5">
+                    <a class="nav-link text-danger fw-bold" href="{{ route('logout') }}"
+                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                        Logout
+                    </a>
+                </li>
+
+                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                    @csrf
+                </form>
             </ul>
         </nav>
 

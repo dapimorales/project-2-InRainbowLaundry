@@ -83,9 +83,7 @@
 
         <!-- RIGHT SIDE (Reservasi & Burger) -->
         <div class="d-flex align-items-center order-lg-2">
-            <a href="/layanan" class="nav-link me-3 fw-bold text-navy d-none d-lg-block">
-                Dashboard Admin
-            </a>
+            
             
             <a href="#" class="btn btn-navy px-4" data-bs-toggle="modal" data-bs-target="#modalReservasiNavbar">
                 Reservasi
@@ -138,9 +136,9 @@
             </div>
             
             <div class="modal-body p-4 pt-2">
-                <form action="/reservasi" method="POST">
-    @csrf
-    <div class="row g-4">
+                <form action="{{ route('reservasi.ambil_bersih') }}" method="POST">
+                @csrf
+            <div class="row g-4">
         
         <div class="col-md-6">
             <input type="text" class="form-control py-2 custom-modal-input" placeholder="Nama" name="nama" required>
@@ -161,9 +159,7 @@
             </select>
         </div>
 
-        <div class="col-md-12">
-            <input type="number" class="form-control py-2 custom-modal-input" placeholder="Jumlah / Berat (Estimasi)" name="qty" min="1" required>
-        </div>
+       
         
         <div class="col-md-6">
             <input type="text" class="form-control py-2 custom-modal-input" placeholder="Tanggal Penjemputan" name="tgl_jemput" onfocus="(this.type='date')" onblur="(this.type='text')" required>

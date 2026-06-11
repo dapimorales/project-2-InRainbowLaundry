@@ -21,6 +21,11 @@ Route::get('/', function () {
     // 2. Lempar data $services itu ke halaman welcome_laundry pakai compact
     return view('welcome_laundry', compact('services'));
 })->name('home');
+
+// 2. INI RUTE DASHBOARD ADMIN (YANG BARU KITA BIKIN)
+Route::get('/dashboard', [\App\Http\Controllers\DashboardController::class, 'index'])
+    ->name('dashboard.index')
+    ->middleware('auth');
 // Pastikan ada ->name('admin.membership') 
 Route::get('/dashboard-admin/membership', [AdminMembershipController::class, 'index'])->name('admin.membership');
 // Halaman Daftar Layanan (Dashboard Admin)
@@ -34,17 +39,24 @@ Route::delete('/layanan/{id}', [ServiceController::class, 'destroy'])->name('lay
 // Customers
 Route::get('/customers', [CustomerController::class, 'index'])->name('customers.index');
 Route::post('/reservasi', [CustomerController::class, 'storeReservasi'])->name('reservasi.store');
+// Rute khusus buat form navbar (Ambil Baju Bersih)
+Route::post('/reservasi/ambil-bersih', [App\Http\Controllers\CustomerController::class, 'storeAmbilBersih'])->name('reservasi.ambil_bersih');
 Route::get('/customers/{id}', [CustomerController::class, 'show'])->name('customers.show');
 Route::delete('/customers/{id}', [CustomerController::class, 'destroy'])->name('customers.destroy');
+Route::put('/transaksi/update-berat/{id}', [App\Http\Controllers\CustomerController::class, 'updateBerat'])->name('transaksi.update_berat');
 // Route buat Export Data Pelanggan
 Route::get('/pelanggan/export/pdf', [\App\Http\Controllers\CustomerController::class, 'exportPdf'])->name('pelanggan.pdf');
 Route::get('/pelanggan/export/excel', [\App\Http\Controllers\CustomerController::class, 'exportExcel'])->name('pelanggan.excel');
 
 // Transaksi
 Route::get('/transaksi', [CustomerController::class, 'indexTransaksi'])->name('transaksi.index');
+// Rute buat nampilin form kasir offline
+Route::get('/transaksi/create', [App\Http\Controllers\CustomerController::class, 'create'])->name('transaksi.create');
+// Rute buat nyimpen data dari form kasir
+Route::post('/transaksi/store-manual', [App\Http\Controllers\CustomerController::class, 'storeManual'])->name('transaksi.store_manual');
 Route::put('/transaksi/{id}/status', [CustomerController::class, 'updateStatus'])->name('transaksi.updateStatus');
 Route::get('/transaksi/{id}', [CustomerController::class, 'showTransaksi'])->name('transaksi.show');
-
+Route::put('/transaksi/pembayaran/{id}', [App\Http\Controllers\CustomerController::class, 'updatePembayaran'])->name('transaksi.update_pembayaran');
 // Syarat & Ketentuan
 Route::get('/syarat-ketentuan', function () {
     return view('syarat_ketentuan');
@@ -69,3 +81,6 @@ Route::get('/transaksi/{id}/cetak', [CustomerController::class, 'cetakInvoice'])
 //payment dummy
 Route::get('/pembayaran-membership/{id}', [PaymentController::class, 'show'])->name('dummy.bayar');
 Route::post('/pembayaran-membership/{id}/proses', [PaymentController::class, 'process'])->name('dummy.proses');
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

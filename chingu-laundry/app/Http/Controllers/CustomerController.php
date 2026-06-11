@@ -26,66 +26,56 @@ class CustomerController extends Controller
         // Arahkan ke folder transaksi file index.blade.php
         return view('transaksi.index', compact('orders'));
     }
-    public function storeReservasi(\Illuminate\Http\Request $request)
-{
-    // 1. Validasi (Tambahin qty di sini biar wajib diisi)
-    $request->validate([
-        'nama'       => 'required',
-        'no_hp'      => 'required', 
-        'alamat'     => 'required',
-        'service_id' => 'required',
-        'qty'        => 'required|numeric|min:1', // INI TAMBAHANNYA
-        'tgl_jemput' => 'required',
-        'jam_jemput' => 'required',
-    ]);
+   public function storeReservasi(\Illuminate\Http\Request $request)
+    {
+        // 1. Validasi (qty DIHAPUS biar ga error pas form disubmit)
+        $request->validate([
+            'nama'       => 'required',
+            'no_hp'      => 'required', 
+            'alamat'     => 'required',
+            'service_id' => 'required',
+            'tgl_jemput' => 'required',
+            'jam_jemput' => 'required',
+        ]);
 
-    // 2. Simpan ke tabel customers (firstOrCreate biar gak duplikat)
-    $customer = \App\Models\Customer::firstOrCreate(
-        ['no_hp' => $request->no_hp],
-        [
-            'nama'   => $request->nama,
-            'alamat' => $request->alamat,
-        ]
-    );
+        // 2. Simpan ke tabel customers
+        $customer = \App\Models\Customer::firstOrCreate(
+            ['no_hp' => $request->no_hp],
+            [
+                'nama'   => $request->nama,
+                'alamat' => $request->alamat,
+            ]
+        );
 
-    // Bikin kode invoice unik
-    $kodeInvoice = 'INV-' . date('Ymd') . '-' . strtoupper(\Illuminate\Support\Str::random(5));
+        $kodeInvoice = 'INV-' . date('Ymd') . '-' . strtoupper(\Illuminate\Support\Str::random(5));
+        $waktuLengkap = $request->tgl_jemput . ' ' . $request->jam_jemput . ':00';
+        
+        // --- START PERUBAHAN: Set default 0 karena belum ditimbang ---
+        $qty_input = 0; 
+        $total_harga_asli = 0;
+        // --- END PERUBAHAN ---
 
-    // GABUNGKAN Tanggal dan Jam (Format SQL: YYYY-MM-DD HH:MM:SS)
-    $waktuLengkap = $request->tgl_jemput . ' ' . $request->jam_jemput . ':00';
-    
-    // --- START PERUBAHAN HITUNG-HITUNGAN MASBRO ---
-    $layanan = \App\Models\Service::find($request->service_id);
-    $harga = $layanan ? $layanan->harga : 0; 
-    
-    // Ambil angka qty dari form yang diketik pelanggan!
-    $qty_input = $request->qty; 
-    
-    // Rumus sakti: Harga dikali Qty dari form
-    $total_harga_asli = $harga * $qty_input;
-    // --- END PERUBAHAN ---
+        // 3. Simpan ke tabel orders
+        $order = \App\Models\Order::create([
+            'kode_invoice' => $kodeInvoice,
+            'customer_id'  => $customer->id, 
+            'tgl_masuk'    => $waktuLengkap, 
+            'tgl_selesai'  => null,
+            'total_harga'  => $total_harga_asli, // Masuk ke DB nilainya 0
+            'status_order' => 'baru',  
+            'status_bayar' => 'belum', 
+        ]);
 
-    // 3. Simpan ke tabel orders
-    $order = \App\Models\Order::create([
-        'kode_invoice' => $kodeInvoice,
-        'customer_id'  => $customer->id, 
-        'tgl_masuk'    => $waktuLengkap, 
-        'tgl_selesai'  => null,
-        'total_harga'  => $total_harga_asli, // Pake hasil perkalian yang baru
-        'status_order' => 'baru',  
-        'status_bayar' => 'belum', 
-    ]);
+        // 4. Simpan ke tabel order_details
+        \App\Models\OrderDetail::create([
+            'order_id'   => $order->id,
+            'service_id' => $request->service_id,
+            'qty'        => $qty_input, // Masuk ke DB nilainya 0
+            'subtotal'   => $total_harga_asli, // Masuk ke DB nilainya 0
+        ]);
 
-    // 4. Simpan ke tabel order_details
-    \App\Models\OrderDetail::create([
-        'order_id'   => $order->id,
-        'service_id' => $request->service_id,
-        'qty'        => $qty_input, // Simpan qty yang asli ke database
-        'subtotal'   => $total_harga_asli, // Simpan subtotalnya
-    ]);
-
-    return redirect()->back()->with('success', 'Tunggu ya masbro, kurir kami segera meluncur!');
-}
+        return redirect()->back()->with('success', 'Tunggu ya masbro, kurir kami segera meluncur!');
+    }
 public function show($id)
 {
     $customer = Customer::with('orders')->findOrFail($id);
@@ -129,13 +119,63 @@ public function updateStatus(Request $request, $id)
 
     // Logika tambahan: Kalo statusnya 'selesai', isi tgl_selesai otomatis
     if ($request->status_order == 'selesai') {
-        $order->tgl_selesai = now(); 
+        // $order->tgl_selesai = now(); 
     }
 
     $order->save();
 
     // 4. Balik lagi ke halaman detail dengan pesan sukses
     return redirect()->back()->with('success', 'Status order berhasil diupdate, Masbro!');
+}
+// --- FUNGSI UPDATE BERAT & HITUNG OTOMATIS HARGA ---
+    public function updateBerat(Request $request, $id)
+    {
+        $request->validate([
+            'qty' => 'required|numeric|min:1'
+        ]);
+
+        // Cari order dan rincian layanannya
+        $order = \App\Models\Order::findOrFail($id);
+        $detail = \App\Models\OrderDetail::with('service')->where('order_id', $id)->first();
+
+        if ($detail && $detail->service) {
+            // Tarik harga asli dari master layanan
+            $harga_satuan = $detail->service->harga;
+            $qty_baru = $request->qty;
+            
+            // Rumus: Harga x Qty Baru
+            $total_baru = $harga_satuan * $qty_baru;
+
+            // Simpan ke order_detail
+            $detail->qty = $qty_baru;
+            $detail->subtotal = $total_baru;
+            $detail->save();
+
+            // Simpan ke tabel orders utama
+            $order->total_harga = $total_baru;
+            $order->save();
+        }
+
+        return redirect()->back()->with('success', 'Mantap! Berat cucian dan tagihan sukses diupdate.');
+    }
+
+// Update Status Pembayaran
+public function updatePembayaran(Request $request, $id)
+{
+    // 1. Validasi inputan (cuma boleh 'belum' atau 'lunas')
+    $request->validate([
+        'status_bayar' => 'required|in:belum,lunas'
+    ]);
+
+    // 2. Cari ordernya
+    $order = \App\Models\Order::findOrFail($id);
+
+    // 3. Update status bayarnya
+    $order->status_bayar = $request->status_bayar;
+    $order->save();
+
+    // 4. Balikin ke halaman detail dengan alert sukses
+    return redirect()->back()->with('success', 'Mantap! Status pembayaran berhasil diupdate.');
 }
 // Nampilin halaman awal form lacak
     public function halamanCekStatus()
@@ -179,5 +219,104 @@ public function updateStatus(Request $request, $id)
         
         $pdf = Pdf::loadView('customers.pdf_view', compact('customers', 'totalCustomer'));
         return $pdf->download('Data_Pelanggan_DapiLaundry.pdf');
+    }
+    // --- FUNGSI KHUSUS FORM NAVBAR (JANJI AMBIL/ANTAR BAJU BERSIH) ---
+    public function storeAmbilBersih(\Illuminate\Http\Request $request)
+    {
+        // 1. Validasi form navbar (Sama persis kayak form bawah, tapi tanpa qty)
+        $request->validate([
+            'nama'       => 'required',
+            'no_hp'      => 'required',
+            'tgl_jemput' => 'required',
+            'jam_jemput' => 'required',
+        ]);
+
+        // 2. Cari data pelanggan di database berdasarkan Nomor WA
+        $customer = \App\Models\Customer::where('no_hp', $request->no_hp)->first();
+
+        // Kalau WA-nya nggak pernah terdaftar
+        if (!$customer) {
+            return redirect()->back()->with('error', 'Waduh, nomor WA tidak ditemukan. Pastikan nomornya sama dengan saat menaruh cucian ya!');
+        }
+
+        // 3. Cari orderan milik pelanggan ini yang statusnya UDAH SELESAI
+        $order = \App\Models\Order::where('customer_id', $customer->id)
+                                  ->where('status_order', 'selesai')
+                                  ->latest()
+                                  ->first();
+
+        // Kalau cuciannya belum ada yang selesai / masih diproses
+        if (!$order) {
+            return redirect()->back()->with('error', 'Maaf, belum ada cucian atas nomormu yang berstatus Selesai. Silakan cek status cucianmu dulu ya!');
+        }
+
+        // Kalau cuciannya belum ada yang selesai / masih diproses
+        if (!$order) {
+            return redirect()->back()->with('error', 'Maaf, belum ada cucian atas nomormu yang berstatus Selesai. Silakan cek status cucianmu dulu ya!');
+        }
+
+        // 4. SIMPAN JADWAL KE DATABASE (INI YANG BARU)
+        $order->rencana_ambil = $request->tgl_jemput . ' ' . $request->jam_jemput . ':00';
+        $order->save();
+
+        return redirect()->back()->with('success', 'Sip mantap! Baju bersihmu akan kami siapkan sesuai jadwal: ' . $request->tgl_jemput . ' jam ' . $request->jam_jemput);
+    }
+    // --- FITUR KASIR OFFLINE (DI TOKO) ---
+    public function create()
+    {
+        // Narik data layanan biar kasir bisa milih di dropdown
+        $services = \App\Models\Service::all();
+        return view('transaksi.create', compact('services'));
+    }
+
+    public function storeManual(Request $request)
+    {
+        $request->validate([
+            'nama'              => 'required',
+            'no_hp'             => 'required',
+            'alamat'            => 'required',
+            'service_id'        => 'required',
+            'qty'               => 'required|numeric|min:1',
+            'tgl_selesai'       => 'required|date',
+            'status_bayar'      => 'required|in:belum,lunas',
+            'metode_pembayaran' => 'nullable|string'
+        ]);
+
+        // 1. Cari atau Bikin Data Pelanggan Baru
+        $customer = \App\Models\Customer::firstOrCreate(
+            ['no_hp' => $request->no_hp],
+            [
+                'nama'   => $request->nama,
+                'alamat' => $request->alamat,
+            ]
+        );
+
+        // 2. Tarik Harga Layanan buat Dikalikan sama Berat
+        $service = \App\Models\Service::findOrFail($request->service_id);
+        $total_harga = $service->harga * $request->qty;
+
+        $kodeInvoice = 'INV-' . date('Ymd') . '-' . strtoupper(\Illuminate\Support\Str::random(5));
+
+        // 3. Simpan ke tabel orders utama
+        $order = \App\Models\Order::create([
+            'kode_invoice'      => $kodeInvoice,
+            'customer_id'       => $customer->id,
+            'tgl_masuk'         => now(), // Waktu otomatis detik ini
+            'tgl_selesai'       => $request->tgl_selesai,
+            'total_harga'       => $total_harga,
+            'status_order'      => 'baru', // Status awal masuk
+            'status_bayar'      => $request->status_bayar,
+            'metode_pembayaran' => $request->status_bayar == 'lunas' ? $request->metode_pembayaran : null,
+        ]);
+
+        // 4. Simpan ke tabel rincian order
+        \App\Models\OrderDetail::create([
+            'order_id'   => $order->id,
+            'service_id' => $request->service_id,
+            'qty'        => $request->qty,
+            'subtotal'   => $total_harga,
+        ]);
+
+        return redirect()->route('transaksi.index')->with('success', 'Mantap! Transaksi kasir offline sukses dicatat.');
     }
 }

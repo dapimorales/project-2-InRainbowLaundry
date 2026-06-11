@@ -16,7 +16,8 @@ class Order extends Model
         'tgl_selesai', 
         'total_harga', 
         'status_order', 
-        'status_bayar'
+        'status_bayar',
+        'rencana_ambil'
     ];
     public function customer()
     {
