@@ -17,14 +17,18 @@ class CustomerController extends Controller
         
         return view('customers.index', compact('customers'));
     }
-    public function indexTransaksi()
+    public function indexTransaksi(Request $request)
     {
-        // Ambil data order, urutkan dari yang terbaru, 
-        // dan bawa relasi 'customer'-nya biar nama pelanggan muncul
-        $orders = Order::with('customer')->latest()->get();
-        
-        // Arahkan ke folder transaksi file index.blade.php
-        return view('transaksi.index', compact('orders'));
+     $query = \App\Models\Order::with('customer')->latest();
+
+    // Pakai 'when' biar kalau $request->tipe kosong, dia nampilin semua
+    $query->when($request->tipe, function ($q) use ($request) {
+        return $q->where('tipe_pesanan', $request->tipe);
+    });
+
+    $orders = $query->get();
+    
+    return view('transaksi.index', compact('orders'));
     }
    public function storeReservasi(\Illuminate\Http\Request $request)
     {
@@ -64,6 +68,7 @@ class CustomerController extends Controller
             'total_harga'  => $total_harga_asli, // Masuk ke DB nilainya 0
             'status_order' => 'baru',  
             'status_bayar' => 'belum', 
+            'tipe_pesanan' => 'online', // 👇👇 INI TAMBAHANNYA BIAR FILTER JALAN 👇👇
         ]);
 
         // 4. Simpan ke tabel order_details
@@ -318,5 +323,32 @@ public function updatePembayaran(Request $request, $id)
         ]);
 
         return redirect()->route('transaksi.index')->with('success', 'Mantap! Transaksi kasir offline sukses dicatat.');
+    }
+    // --- FUNGSI EXCEL TRANSAKSI ---
+    public function exportExcelTransaksi(Request $request)
+    {
+        $nama_file = 'laporan-transaksi-' . ($request->tipe ?: 'semua') . '.xlsx';
+        
+        // Pastikan lu udah bikin TransaksiExport di App\Exports\TransaksiExport
+        return Excel::download(new \App\Exports\TransaksiExport($request->tipe), $nama_file);
+    }
+
+    // --- FUNGSI PDF TRANSAKSI ---
+    public function exportPdfTransaksi(Request $request)
+    {
+        // 👇 UBAH DI SINI: Tambahin with('customer')
+        $query = \App\Models\Order::with('customer');
+
+        // Tangkap filternya biar PDF yang dicetak sesuai pilihan
+        if ($request->has('tipe') && $request->tipe != '' && $request->tipe != 'semua') {
+            $query->where('tipe_pesanan', $request->tipe);
+        }
+
+        $transaksi = $query->get();
+        $nama_file = 'laporan-transaksi-' . ($request->tipe ?: 'semua') . '.pdf';
+
+        $pdf = Pdf::loadView('transaksi.export', compact('transaksi'));
+        
+        return $pdf->download($nama_file);
     }
 }

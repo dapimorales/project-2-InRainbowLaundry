@@ -17,7 +17,8 @@ class Order extends Model
         'total_harga', 
         'status_order', 
         'status_bayar',
-        'rencana_ambil'
+        'rencana_ambil',
+        'tipe_pesanan'
     ];
     public function customer()
     {

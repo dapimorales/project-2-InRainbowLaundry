@@ -9,12 +9,33 @@
         <a href="{{ route('transaksi.create') }}" class="btn text-white fw-bold me-2 btn-sm" style="background-color: #179BAE; border-radius: 5px;">
             <i class="fa-solid fa-plus me-1"></i> Tambah Transaksi Offline
         </a>
-        
-        <!-- TOMBOL EXPORT  -->
-        <button class="btn btn-outline-secondary btn-sm"><i class="fa-solid fa-download"></i> Export Data</button>
     </div>
 </div>
+<div style="background: #fff; padding: 15px; border-radius: 8px; border: 1px solid #e5e7eb; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
+    
+    <form action="{{ route('transaksi.index') }}" method="GET" style="display: flex; gap: 10px; align-items: center; margin: 0;">
+        <label style="font-weight: bold; color: #374151;">Filter:</label>
+        <select name="tipe" style="padding: 8px 12px; border-radius: 5px; border: 1px solid #d1d5db; outline: none; background: #f9fafb;">
+            <option value="">Semua Transaksi</option>
+            <option value="online" {{ request('tipe') == 'online' ? 'selected' : '' }}>Online (Website)</option>
+            <option value="offline" {{ request('tipe') == 'offline' ? 'selected' : '' }}>Offline (Kasir)</option>
+        </select>
+        
+        <button type="submit" style="background: #007bff; color: white; padding: 8px 16px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; transition: 0.3s;">
+            Cari
+        </button>
+    </form>
 
+    <div style="display: flex; gap: 10px;">
+        <a href="{{ route('transaksi.pdf', ['tipe' => request('tipe')]) }}" style="background: #dc3545; color: white; padding: 8px 16px; text-decoration: none; border-radius: 5px; font-weight: bold; transition: 0.3s;">
+            Export PDF
+        </a>
+        <a href="{{ route('transaksi.excel', ['tipe' => request('tipe')]) }}" style="background: #28a745; color: white; padding: 8px 16px; text-decoration: none; border-radius: 5px; font-weight: bold; transition: 0.3s;">
+            Export Excel
+        </a>
+    </div>
+    
+</div>
 @include('layouts.flash')
 
 <div class="card shadow-sm">

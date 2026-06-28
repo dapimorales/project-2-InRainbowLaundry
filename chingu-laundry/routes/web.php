@@ -54,6 +54,8 @@ Route::get('/transaksi', [CustomerController::class, 'indexTransaksi'])->name('t
 Route::get('/transaksi/create', [App\Http\Controllers\CustomerController::class, 'create'])->name('transaksi.create');
 // Rute buat nyimpen data dari form kasir
 Route::post('/transaksi/store-manual', [App\Http\Controllers\CustomerController::class, 'storeManual'])->name('transaksi.store_manual');
+Route::get('/transaksi/export-pdf', [App\Http\Controllers\CustomerController::class, 'exportPdfTransaksi'])->name('transaksi.pdf');
+Route::get('/transaksi/export-excel', [App\Http\Controllers\CustomerController::class, 'exportExcelTransaksi'])->name('transaksi.excel');
 Route::put('/transaksi/{id}/status', [CustomerController::class, 'updateStatus'])->name('transaksi.updateStatus');
 Route::get('/transaksi/{id}', [CustomerController::class, 'showTransaksi'])->name('transaksi.show');
 Route::put('/transaksi/pembayaran/{id}', [App\Http\Controllers\CustomerController::class, 'updatePembayaran'])->name('transaksi.update_pembayaran');
