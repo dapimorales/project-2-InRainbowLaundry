@@ -9,6 +9,7 @@
         <a href="{{ route('transaksi.create') }}" class="btn text-white fw-bold me-2 btn-sm" style="background-color: #179BAE; border-radius: 5px;">
             <i class="fa-solid fa-plus me-1"></i> Tambah Transaksi Offline
         </a>
+        <a href="{{ route('transaksi.pendapatan') }}" class="btn btn-primary">Lihat Laporan Pendapatan</a>
     </div>
 </div>
 <div style="background: #fff; padding: 15px; border-radius: 8px; border: 1px solid #e5e7eb; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">

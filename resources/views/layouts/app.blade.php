@@ -8,7 +8,14 @@
     <style>
         body { background-color: #f8f9fa; }
         .navbar { background-color: #ffffff; box-shadow: 0 2px 4px rgba(0,0,0,.05); }
-        .sidebar { min-height: 100vh; background: #fff; border-right: 1px solid #dee2e6; }
+        .sidebar { 
+            /* Mengubah min-height menjadi height agar tidak memaksa memanjang */
+            height: 100%; 
+            background: #fff; 
+            border-right: 1px solid #dee2e6; 
+            /* Tambahkan padding bawah agar tidak terlalu mepet jika menu sedikit */
+            padding-bottom: 2rem; 
+        }
         .nav-link { color: #333; font-weight: 500; }
         .nav-link.active { color: #0d6efd; background: #e9ecef; border-radius: 8px; }
     </style>

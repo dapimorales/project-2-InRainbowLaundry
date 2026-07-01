@@ -351,4 +351,76 @@ public function updatePembayaran(Request $request, $id)
         
         return $pdf->download($nama_file);
     }
+    // --- FUNGSI LAPORAN PENDAPATAN BULANAN ---
+    public function laporanPendapatan(\Illuminate\Http\Request $request)
+    {
+        // Bikin query dasarnya dulu
+        $query = \App\Models\Order::select(
+                \Illuminate\Support\Facades\DB::raw("DATE_FORMAT(tgl_masuk, '%Y-%m') as bulan_tahun"),
+                \Illuminate\Support\Facades\DB::raw("SUM(CASE WHEN status_bayar = 'lunas' THEN 1 ELSE 0 END) as total_transaksi"),
+                \Illuminate\Support\Facades\DB::raw("SUM(CASE WHEN status_bayar = 'lunas' THEN total_harga ELSE 0 END) as total_pendapatan")
+            );
+
+        // Kalau ada request pencarian berdasarkan bulan
+        if ($request->has('bulan') && $request->bulan != '') {
+            // Filter datanya (format input type="month" adalah YYYY-MM)
+            $query->whereRaw("DATE_FORMAT(tgl_masuk, '%Y-%m') = ?", [$request->bulan]);
+        }
+
+        // Lanjutin query untuk grouping dan ambil datanya
+        $laporan = $query->groupBy('bulan_tahun')
+                         ->orderBy('bulan_tahun', 'desc')
+                         ->get();
+
+        // Format nama bulan biar rapi
+        $laporan->transform(function ($item) {
+            $item->bulan_format = \Carbon\Carbon::createFromFormat('Y-m', $item->bulan_tahun)
+                                        ->translatedFormat('F Y');
+            return $item;
+        });
+
+        return view('transaksi.pendapatan', compact('laporan'));
+    }
+    // --- FUNGSI EXCEL LAPORAN PENDAPATAN ---
+    public function exportExcelPendapatan(\Illuminate\Http\Request $request)
+    {
+        $nama_file = 'Laporan_Pendapatan_InRainbowLaundry_' . ($request->bulan ?: 'Semua_Bulan') . '.xlsx';
+        return Excel::download(new \App\Exports\PendapatanExport($request->bulan), $nama_file);
+    }
+
+    // --- FUNGSI PDF LAPORAN PENDAPATAN ---
+    public function exportPdfPendapatan(\Illuminate\Http\Request $request)
+    {
+        // 1. QUERY SUMMARY (Tabel Atas - Tetap seperti sebelumnya)
+        $query = \App\Models\Order::select(
+            \Illuminate\Support\Facades\DB::raw("DATE_FORMAT(tgl_masuk, '%Y-%m') as bulan_tahun"),
+            \Illuminate\Support\Facades\DB::raw("SUM(CASE WHEN status_bayar = 'lunas' THEN 1 ELSE 0 END) as total_transaksi"),
+            \Illuminate\Support\Facades\DB::raw("SUM(CASE WHEN status_bayar = 'lunas' THEN total_harga ELSE 0 END) as total_pendapatan")
+        );
+
+        if ($request->has('bulan') && $request->bulan != '') {
+            $query->whereRaw("DATE_FORMAT(tgl_masuk, '%Y-%m') = ?", [$request->bulan]);
+        }
+
+        $laporan = $query->groupBy('bulan_tahun')->orderBy('bulan_tahun', 'desc')->get();
+        $laporan->transform(function ($item) {
+            $item->bulan_format = \Carbon\Carbon::createFromFormat('Y-m', $item->bulan_tahun)->translatedFormat('F Y');
+            return $item;
+        });
+
+        // 2. QUERY DETAIL LUNAS (Tabel Bawah - Menampilkan Nama)
+        $queryDetail = \App\Models\Order::with('customer')->where('status_bayar', 'lunas');
+        
+        if ($request->has('bulan') && $request->bulan != '') {
+            $queryDetail->whereRaw("DATE_FORMAT(tgl_masuk, '%Y-%m') = ?", [$request->bulan]);
+        }
+        
+        $detail_lunas = $queryDetail->orderBy('tgl_masuk', 'desc')->get();
+
+        $nama_file = 'Laporan_Pendapatan_InRainbowLaundry_' . ($request->bulan ?: 'Semua_Bulan') . '.pdf';
+        
+        // Jangan lupa tambahkan compact('detail_lunas')
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('transaksi.pendapatan_cetak', compact('laporan', 'detail_lunas'));
+        return $pdf->download($nama_file);
+    }
 }

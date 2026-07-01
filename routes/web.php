@@ -57,6 +57,9 @@ Route::post('/transaksi/store-manual', [App\Http\Controllers\CustomerController:
 Route::get('/transaksi/export-pdf', [App\Http\Controllers\CustomerController::class, 'exportPdfTransaksi'])->name('transaksi.pdf');
 Route::get('/transaksi/export-excel', [App\Http\Controllers\CustomerController::class, 'exportExcelTransaksi'])->name('transaksi.excel');
 Route::put('/transaksi/{id}/status', [CustomerController::class, 'updateStatus'])->name('transaksi.updateStatus');
+Route::get('/transaksi/pendapatan', [App\Http\Controllers\CustomerController::class, 'laporanPendapatan'])->name('transaksi.pendapatan');
+Route::get('/transaksi/pendapatan/export-pdf', [App\Http\Controllers\CustomerController::class, 'exportPdfPendapatan'])->name('transaksi.pendapatan.pdf');
+Route::get('/transaksi/pendapatan/export-excel', [App\Http\Controllers\CustomerController::class, 'exportExcelPendapatan'])->name('transaksi.pendapatan.excel');
 Route::get('/transaksi/{id}', [CustomerController::class, 'showTransaksi'])->name('transaksi.show');
 Route::put('/transaksi/pembayaran/{id}', [App\Http\Controllers\CustomerController::class, 'updatePembayaran'])->name('transaksi.update_pembayaran');
 // Syarat & Ketentuan
